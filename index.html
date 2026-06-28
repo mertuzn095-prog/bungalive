@@ -811,7 +811,7 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
   border-color: var(--forest); background: var(--forest); color: var(--white);
 }
 .listings-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  display: grid; grid-template-columns: repeat(4, 1fr);
   gap: 24px;
 }
 .listing-card {
@@ -1627,7 +1627,7 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
 @media (max-width: 768px) {
   .nav-links { display: none; }
   .cat-grid-new { grid-template-columns: repeat(2, 1fr); }
-  .listings-grid { grid-template-columns: 1fr; }
+  .listings-grid { grid-template-columns: repeat(2, 1fr); }
   .steps-grid { grid-template-columns: 1fr 1fr; }
   .steps-grid::before { display: none; }
   .test-grid { grid-template-columns: 1fr; }
@@ -2938,8 +2938,6 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
       <div class="logo-text">Bunga<span>Live</span></div>
     </a>
       <div class="nav-links">
-      <a href="#listings">İlanlar</a>
-      <a href="#featured">Öne Çıkanlar</a>
     </div>
     <div class="nav-actions">
       <button class="btn btn-amber" id="talepOlusturBtn" onclick="openTalepModal()" style="display:none;">+ Talep Oluştur</button>
@@ -3045,25 +3043,23 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
         <span>Filtreler</span>
       </button>
       <div class="search-pill-divider"></div>
-      <div class="search-pill-field">
+      <div class="search-pill-field" id="typeField" onclick="toggleTypeDropdown(event)" style="cursor:pointer;">
         <label>Konaklama Türü</label>
-        <select id="searchType">
-          <option value="bungalov">🏡 Bungalov</option>
-          <option value="villa">🏠 Villa</option>
-        </select>
+        <div class="guest-selector">
+          <span id="typeDisplay">Bungalov</span>
+          <span class="guest-arrow">▾</span>
+        </div>
+        <input type="hidden" id="searchType" value="bungalov">
       </div>
       <div class="search-pill-divider"></div>
-      <div class="search-pill-field date-field">
+      <div class="search-pill-field date-field" id="dateField" onclick="toggleDatePicker(event)" style="cursor:pointer;">
         <label>Ne zaman?</label>
-        <div class="date-range">
-          <div class="date-input-wrapper" onclick="document.getElementById('searchIn').showPicker()">
-            <input type="date" id="searchIn" placeholder="Giriş" onchange="if(this.value){ setTimeout(function(){ try{ document.getElementById('searchOut').showPicker(); }catch(e){} }, 80); }">
-          </div>
-          <span class="date-separator">–</span>
-          <div class="date-input-wrapper" onclick="document.getElementById('searchOut').showPicker()">
-            <input type="date" id="searchOut" placeholder="Çıkış">
-          </div>
+        <div class="guest-selector">
+          <span id="dateDisplay" style="white-space:nowrap;">Tarih seçin</span>
+          <span class="guest-arrow">▾</span>
         </div>
+        <input type="hidden" id="searchIn">
+        <input type="hidden" id="searchOut">
       </div>
       <div class="search-pill-divider"></div>
       <div class="search-pill-field guest-field">
@@ -3152,14 +3148,7 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
 
 <!-- LISTINGS -->
 <section class="listings reveal" id="listings">
-  <div class="section-header">
-    <div>
-      <h2 class="section-title">Sapanca Bungalovları</h2>
-      <p class="section-sub">En çok tercih edilen bungalov evleri</p>
-    </div>
-    <a href="#" class="section-link">Tüm İlanlar →</a>
-  </div>
-  
+
   <div class="filter-bar">
     <button class="filter-chip active" onclick="filterListings(this, 'all')">Tümü</button>
     <button class="filter-chip" onclick="filterListings(this, 'gol')">Göl Kenarı</button>
@@ -3172,61 +3161,6 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
 
   <div class="listings-grid" id="listingsGrid">
     <!-- Filled by JS -->
-  </div>
-</section>
-
-<!-- FEATURED -->
-<section class="featured reveal" id="featured">
-  <div class="featured-inner">
-    <div class="section-header">
-      <div>
-        <h2 class="section-title">Öne Çıkanlar</h2>
-        <p class="section-sub">Bu haftanın en beğenilen konaklamaları</p>
-      </div>
-      <a href="#" class="section-link">Keşfet →</a>
-    </div>
-    <div class="featured-grid">
-      <div class="feat-card">
-        <img src="https://cdn.villareyonu.com/uploads/2048/Bungalov-Derin-1_514.jpg" alt="">
-        <div class="feat-overlay">
-          <h3>Sapanca Orman Bungalov</h3>
-          <p>📍 Sapanca, Sakarya · ⭐ 4.9 · 2 Yatak Odası</p>
-        </div>
-        <div class="feat-price-tag">₺3,200/gece</div>
-      </div>
-      <div class="feat-card">
-        <img src="https://www.bungalovyolu.com/uploads/WhatsApp-image-2024-05-05-at-15-26-07_402.jpeg" alt="">
-        <div class="feat-overlay">
-          <h3>Havuzlu Bungalov</h3>
-          <p>📍 Sapanca · ⭐ 4.8</p>
-        </div>
-        <div class="feat-price-tag">₺4,500/gece</div>
-      </div>
-      <div class="feat-card">
-        <img src="https://www.bungalovilla.com/upload/catalog/186/1200/sapanca-teras-bungalov-84.jpg?22" alt="">
-        <div class="feat-overlay">
-          <h3>Teras Bungalov</h3>
-          <p>📍 Sapanca · ⭐ 4.9</p>
-        </div>
-        <div class="feat-price-tag">₺2,100/gece</div>
-      </div>
-      <div class="feat-card">
-        <img src="https://cdn.trav3l.net/sapancakonaklamarehberi.com/uploads/sapanca-bungalov-evleri-fiyatlari.jpeg" alt="">
-        <div class="feat-overlay">
-          <h3>Doğa Bungalov</h3>
-          <p>📍 Sapanca · ⭐ 5.0</p>
-        </div>
-        <div class="feat-price-tag">₺5,800/gece</div>
-      </div>
-      <div class="feat-card">
-        <img src="https://www.seninvillan.com.tr/assets/images/blog/big/sapanca-bungalov-ev_1.jpg" alt="">
-        <div class="feat-overlay">
-          <h3>Göl Manzaralı Bungalov</h3>
-          <p>📍 Sapanca · ⭐ 4.7</p>
-        </div>
-        <div class="feat-price-tag">₺3,750/gece</div>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -4744,7 +4678,7 @@ function renderListings(filter='all') {
   const grid = document.getElementById('listingsGrid');
   const filtered = filter==='all' ? listings : listings.filter(l=>l.tags.includes(filter));
   grid.innerHTML = filtered.map(l => `
-    <div class="listing-card" onclick="openModal(${l.id})">
+    <div class="listing-card" onclick="window.open('listing.html?id='+${l.id},'_blank')" style="cursor:pointer;">
       <div class="listing-img">
         <img src="${l.img}" alt="${l.title}" loading="lazy">
         ${l.badge ? `<div class="listing-badge ${l.badge}">${l.badgeText}</div>` : ''}
@@ -4915,7 +4849,7 @@ function doSearch() {
 
   document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
   grid.innerHTML = filtered.length ? filtered.map(l => `
-    <div class="listing-card" onclick="openModal(${l.id})">
+    <div class="listing-card" onclick="window.open('listing.html?id='+${l.id},'_blank')" style="cursor:pointer;">
       <div class="listing-img">
         <img src="${l.img}" alt="${l.title}" loading="lazy">
         ${l.badge ? `<div class="listing-badge ${l.badge}">${l.badgeText}</div>` : ''}
@@ -4996,6 +4930,105 @@ function closeGuestDropdown() {
   if (field) field.classList.remove('open');
   if (dropdown) dropdown.classList.remove('open');
 }
+
+// ===== KONAKLAMA TÜRÜ =====
+function toggleTypeDropdown(e) {
+  e.stopPropagation();
+  const dd = document.getElementById('typeDropdown');
+  const field = document.getElementById('typeField');
+  if (dd.style.display === 'block') { dd.style.display = 'none'; return; }
+  closeGuestDropdown(); closeDatePicker();
+  const rect = field.getBoundingClientRect();
+  dd.style.top = (rect.bottom + 6) + 'px';
+  dd.style.left = rect.left + 'px';
+  dd.style.display = 'block';
+  const cur = document.getElementById('searchType').value;
+  ['bungalov','villa'].forEach(v => {
+    const el = document.getElementById('typeOpt-' + v);
+    if (el) el.style.background = (v === cur) ? 'var(--cream)' : '';
+  });
+}
+function selectType(val, label) {
+  document.getElementById('searchType').value = val;
+  document.getElementById('typeDisplay').textContent = label;
+  document.getElementById('typeDropdown').style.display = 'none';
+}
+function closeTypeDropdown() { document.getElementById('typeDropdown').style.display = 'none'; }
+
+// ===== DATE PICKER =====
+let dpYear, dpMonth, dpCheckin = null, dpCheckout = null, dpSelecting = 0;
+const DP_MONTHS = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+const DP_DAYS = ['Pt','Sa','Ça','Pe','Cu','Ct','Pa'];
+
+function toggleDatePicker(e) {
+  e.stopPropagation();
+  const dd = document.getElementById('datePickerDropdown');
+  const field = document.getElementById('dateField');
+  if (dd.style.display === 'block') { dd.style.display = 'none'; return; }
+  closeGuestDropdown(); closeTypeDropdown();
+  const now = new Date();
+  dpYear = now.getFullYear(); dpMonth = now.getMonth();
+  renderDpGrid();
+  const rect = field.getBoundingClientRect();
+  const left = Math.min(rect.left, window.innerWidth - 330);
+  dd.style.top = (rect.bottom + 6) + 'px';
+  dd.style.left = Math.max(0, left) + 'px';
+  dd.style.display = 'block';
+}
+function closeDatePicker() { document.getElementById('datePickerDropdown').style.display = 'none'; }
+function dpPrevMonth() { dpMonth--; if (dpMonth < 0) { dpMonth = 11; dpYear--; } renderDpGrid(); }
+function dpNextMonth() { dpMonth++; if (dpMonth > 11) { dpMonth = 0; dpYear++; } renderDpGrid(); }
+function dpFmt(d) { return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function dpFmtShort(d) { return String(d.getDate()).padStart(2,'0')+' '+DP_MONTHS[d.getMonth()].slice(0,3); }
+function dpClear() {
+  dpCheckin = null; dpCheckout = null; dpSelecting = 0;
+  document.getElementById('searchIn').value = '';
+  document.getElementById('searchOut').value = '';
+  document.getElementById('dateDisplay').textContent = 'Tarih seçin';
+  renderDpGrid();
+}
+function dpSelectDay(y, m, d) {
+  const sel = new Date(y, m, d);
+  const today = new Date(); today.setHours(0,0,0,0);
+  if (sel < today) return;
+  if (!dpCheckin || dpCheckout) { dpCheckin = sel; dpCheckout = null; dpSelecting = 1; }
+  else if (sel <= dpCheckin) { dpCheckin = sel; dpCheckout = null; }
+  else { dpCheckout = sel; dpSelecting = 0; }
+  renderDpGrid();
+  if (dpCheckin) document.getElementById('searchIn').value = dpFmt(dpCheckin);
+  if (dpCheckout) document.getElementById('searchOut').value = dpFmt(dpCheckout);
+  if (dpCheckin && dpCheckout)
+    document.getElementById('dateDisplay').textContent = dpFmtShort(dpCheckin) + ' – ' + dpFmtShort(dpCheckout);
+  else if (dpCheckin)
+    document.getElementById('dateDisplay').textContent = dpFmtShort(dpCheckin) + ' – ?';
+}
+function renderDpGrid() {
+  document.getElementById('dpMonthLabel').textContent = DP_MONTHS[dpMonth] + ' ' + dpYear;
+  const grid = document.getElementById('dpGrid');
+  const today = new Date(); today.setHours(0,0,0,0);
+  let html = DP_DAYS.map(d => `<div style="font-size:11px;font-weight:700;color:var(--stone);padding:5px 0;">${d}</div>`).join('');
+  const firstDay = new Date(dpYear, dpMonth, 1).getDay();
+  const offset = firstDay === 0 ? 6 : firstDay - 1;
+  const total = new Date(dpYear, dpMonth + 1, 0).getDate();
+  for (let i = 0; i < offset; i++) html += '<div></div>';
+  for (let d = 1; d <= total; d++) {
+    const date = new Date(dpYear, dpMonth, d);
+    const past = date < today;
+    const isIn = dpCheckin && date.getTime() === dpCheckin.getTime();
+    const isOut = dpCheckout && date.getTime() === dpCheckout.getTime();
+    const inRange = dpCheckin && dpCheckout && date > dpCheckin && date < dpCheckout;
+    let bg = 'transparent', col = past ? '#ccc' : 'var(--bark)', br = '50%', cur = past ? 'default' : 'pointer';
+    if (isIn || isOut) { bg = 'var(--forest)'; col = '#fff'; }
+    else if (inRange) { bg = '#d4e9d8'; col = 'var(--forest)'; br = '0'; }
+    const hover = (!past && !isIn && !isOut) ? `onmouseover="this.style.background='var(--cream)'" onmouseout="this.style.background='${bg}'"` : '';
+    html += `<div onclick="event.stopPropagation();${past ? '' : `dpSelectDay(${dpYear},${dpMonth},${d})`}" ${hover} style="padding:6px 2px;border-radius:${br};background:${bg};color:${col};font-size:13px;font-weight:600;cursor:${cur};transition:background 0.12s;">${d}</div>`;
+  }
+  grid.innerHTML = html;
+}
+document.addEventListener('click', e => {
+  if (!document.getElementById('typeField')?.contains(e.target) && !document.getElementById('typeDropdown')?.contains(e.target)) closeTypeDropdown();
+  if (!document.getElementById('dateField')?.contains(e.target) && !document.getElementById('datePickerDropdown')?.contains(e.target)) closeDatePicker();
+});
 
 function openDatePicker(e, inputId) {
   const input = document.getElementById(inputId);
@@ -5412,7 +5445,7 @@ function renderFavorites() {
   }
   
   container.innerHTML = favoriteListings.map(l => `
-    <div class="listing-card" onclick="openModal(${l.id}); closeFavoritesModal();">
+    <div class="listing-card" onclick="window.open('listing.html?id='+${l.id},'_blank'); closeFavoritesModal();" style="cursor:pointer;">
       <div class="listing-img">
         <img src="${l.img}" alt="${l.title}" loading="lazy">
         ${l.badge ? `<div class="listing-badge ${l.badge}">${l.badgeText}</div>` : ''}
@@ -5489,7 +5522,7 @@ function renderPersonalizedListings() {
   const personalized = listings.slice(0, 3);
   
   container.innerHTML = personalized.map(l => `
-    <div class="listing-card" onclick="openModal(${l.id}); closePersonalizedModal();">
+    <div class="listing-card" onclick="window.open('listing.html?id='+${l.id},'_blank'); closePersonalizedModal();" style="cursor:pointer;">
       <div class="listing-img">
         <img src="${l.img}" alt="${l.title}" loading="lazy">
         ${l.badge ? `<div class="listing-badge ${l.badge}">${l.badgeText}</div>` : ''}
@@ -6386,11 +6419,54 @@ function getFilterLabel(value) {
 
 </script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"75124c326cb447fe934cde04713ae013","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+<!-- Type Dropdown -->
+<div id="typeDropdown" style="display:none;position:fixed;background:var(--white);border-radius:var(--radius-sm);box-shadow:0 12px 50px rgba(0,0,0,0.25);padding:12px;z-index:99999;border:1px solid #e0ddd5;min-width:220px;">
+<div id="typeOpt-bungalov" onclick="selectType('bungalov','Bungalov')" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;cursor:pointer;font-size:15px;font-weight:600;color:var(--bark);border-bottom:1px solid var(--sand);transition:background 0.15s;" onmouseover="this.style.background='var(--cream)'" onmouseout="this.style.background=''">
+    <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="16" y="34" width="32" height="22" rx="2" fill="#5a8a4a"/>
+      <polygon points="8,36 32,12 56,36" fill="#3d6b2e"/>
+      <rect x="27" y="44" width="10" height="12" rx="1" fill="#c8a97a"/>
+      <rect x="18" y="38" width="8" height="7" rx="1" fill="#a3d4f7"/>
+      <rect x="38" y="38" width="8" height="7" rx="1" fill="#a3d4f7"/>
+      <line x1="32" y1="12" x2="32" y2="8" stroke="#8B6914" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="32" cy="7" r="2" fill="#D4922A"/>
+    </svg>
+    Bungalov
+  </div>
+  <div id="typeOpt-villa" onclick="selectType('villa','Villa')" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;cursor:pointer;font-size:15px;font-weight:600;color:var(--bark);transition:background 0.15s;" onmouseover="this.style.background='var(--cream)'" onmouseout="this.style.background=''">
+    <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="8" y="28" width="48" height="28" rx="2" fill="#c8a97a"/>
+      <polygon points="6,30 32,10 58,30" fill="#a07840"/>
+      <rect x="14" y="36" width="10" height="10" rx="1" fill="#a3d4f7"/>
+      <rect x="40" y="36" width="10" height="10" rx="1" fill="#a3d4f7"/>
+      <rect x="26" y="40" width="12" height="16" rx="1" fill="#8B6914"/>
+      <rect x="10" y="26" width="6" height="6" rx="1" fill="#c8a97a"/>
+      <rect x="48" y="26" width="6" height="6" rx="1" fill="#c8a97a"/>
+      <rect x="8" y="54" width="48" height="3" rx="1" fill="#8B6914"/>
+    </svg>
+    Villa
+  </div>
+</div>
+
+<!-- Date Picker Dropdown -->
+<div id="datePickerDropdown" style="display:none;position:fixed;background:var(--white);border-radius:var(--radius-sm);box-shadow:0 12px 50px rgba(0,0,0,0.25);padding:20px;z-index:99999;border:1px solid #e0ddd5;min-width:310px;">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+    <button type="button" onclick="event.stopPropagation();dpPrevMonth()" class="guest-btn" style="font-size:18px;line-height:1;">‹</button>
+    <span id="dpMonthLabel" style="font-size:15px;font-weight:700;color:var(--bark);"></span>
+    <button type="button" onclick="event.stopPropagation();dpNextMonth()" class="guest-btn" style="font-size:18px;line-height:1;">›</button>
+  </div>
+  <div id="dpGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center;"></div>
+  <div style="display:flex;justify-content:space-between;margin-top:16px;padding-top:14px;border-top:1px solid var(--sand);">
+    <button type="button" onclick="event.stopPropagation();dpClear()" style="padding:9px 18px;border-radius:10px;border:2px solid var(--forest);background:var(--white);color:var(--forest);font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">Temizle</button>
+    <button type="button" onclick="event.stopPropagation();closeDatePicker()" class="guest-done-btn" style="width:auto;margin-top:0;padding:9px 22px;">Tamam</button>
+  </div>
+</div>
+
 <!-- Guest Dropdown (body level) -->
 <div id="guestDropdown">
   <div class="guest-row">
     <div class="guest-label">
-      <span class="guest-icon">👨</span> Bay
+      <span class="guest-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--forest)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M5.5 21a8.38 8.38 0 0 1 13 0"/></svg></span> Bay
     </div>
     <div class="guest-counter">
       <button type="button" class="guest-btn" onmousedown="event.stopPropagation(); event.preventDefault(); changeGuest('bay', -1)" ontouchstart="event.stopPropagation(); changeGuest('bay', -1)">−</button>
@@ -6400,7 +6476,7 @@ function getFilterLabel(value) {
   </div>
   <div class="guest-row">
     <div class="guest-label">
-      <span class="guest-icon">👩</span> Bayan
+      <span class="guest-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--forest)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M5.5 21a8.38 8.38 0 0 1 13 0"/><path d="M9 11.5c-.5.8-.5 1.5 0 2" stroke-width="1.2"/><path d="M15 11.5c.5.8.5 1.5 0 2" stroke-width="1.2"/></svg></span> Bayan
     </div>
     <div class="guest-counter">
       <button type="button" class="guest-btn" onmousedown="event.stopPropagation(); event.preventDefault(); changeGuest('bayan', -1)" ontouchstart="event.stopPropagation(); changeGuest('bayan', -1)">−</button>
@@ -6410,7 +6486,7 @@ function getFilterLabel(value) {
   </div>
   <div class="guest-row">
     <div class="guest-label">
-      <span class="guest-icon">👧</span> Çocuk
+      <span class="guest-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--forest)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.2"/><path d="M6 21a7 7 0 0 1 12 0"/><path d="M12 11.2v1.8" stroke-width="1.2"/></svg></span> Çocuk
     </div>
     <div class="guest-counter">
       <button type="button" class="guest-btn" onmousedown="event.stopPropagation(); event.preventDefault(); changeGuest('cocuk', -1)" ontouchstart="event.stopPropagation(); changeGuest('cocuk', -1)">−</button>
