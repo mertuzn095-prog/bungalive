@@ -2940,7 +2940,6 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
       <div class="nav-links">
       <a href="#listings">İlanlar</a>
       <a href="#featured">Öne Çıkanlar</a>
-      <a href="#contact">İletişim</a>
     </div>
     <div class="nav-actions">
       <button class="btn btn-amber" id="talepOlusturBtn" onclick="openTalepModal()" style="display:none;">+ Talep Oluştur</button>
@@ -2995,6 +2994,15 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
           <a href="#" class="user-dropdown-item" onclick="openCompare()">
             <div class="user-dropdown-icon">⇄</div>
             <span>Karşılaştır</span>
+          </a>
+          <div class="user-dropdown-divider"></div>
+          <a href="#" class="user-dropdown-item" onclick="openUserPanel()">
+            <div class="user-dropdown-icon">👤</div>
+            <span>Profilim</span>
+          </a>
+          <a href="#contact" class="user-dropdown-item" onclick="document.getElementById('userMenuWrapper').classList.remove('open')">
+            <div class="user-dropdown-icon">✉</div>
+            <span>İletişim</span>
           </a>
           <div class="user-dropdown-divider"></div>
           <a href="#" class="user-dropdown-item logout" onclick="logoutUser()">
@@ -3122,8 +3130,22 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
   <div class="reverse-market-hero-content">
     <h2 class="reverse-market-hero-title">Tatil planını yap, bize talebini ilet!</h2>
     <p class="reverse-market-hero-sub">Hayalindeki bungalov tatili için ücretsiz talep oluştur, sana uygun bungalov sahiplerinden teklifler al.</p>
-    <div class="reverse-market-hero-btns">
+    <div class="reverse-market-hero-btns" style="align-items:center; flex-wrap:wrap; gap:12px;">
       <button class="rm-btn-primary" onclick="openTalepModal()">+ Talep Oluştur</button>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);border-radius:50px;padding:6px 12px;backdrop-filter:blur(4px);">
+          <span style="color:#8fce76;font-size:13px;">✓</span>
+          <span style="color:white;font-size:12px;font-weight:600;">Gerçek İşletmeler</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);border-radius:50px;padding:6px 12px;backdrop-filter:blur(4px);">
+          <span style="font-size:13px;">💬</span>
+          <span style="color:white;font-size:12px;font-weight:600;">Aracısız İletişim</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);border-radius:50px;padding:6px 12px;backdrop-filter:blur(4px);">
+          <span style="font-size:13px;">💰</span>
+          <span style="color:white;font-size:12px;font-weight:600;">Komisyonsuz</span>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -3132,33 +3154,6 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
 <section class="hero">
   <div class="hero-content">
     <div class="hero-left">
-      <div class="hero-badge">Sapanca'nın En Güvenilir Bungalov Ve Villa Platformu</div>
-      <h1 class="hero-title">Hayalinizdeki<br><span class="accent">Konaklamayı</span> Keşfedin</h1>
-      <p class="hero-sub">Gerçek işletmeler, Güncel ilanlar ve Aracısız Doğrudan iletişim imkanıyla hayalinizdeki konaklamayı keşfedin.</p>
-      
-      <div class="why-pills">
-        <div class="why-pill">
-          <div class="why-pill-icon">✓</div>
-          <div class="why-pill-text">
-            <strong>Gerçek İşletmeler</strong>
-            <span>Sadece doğrulanmış işletmeler</span>
-          </div>
-        </div>
-        <div class="why-pill">
-          <div class="why-pill-icon">💬</div>
-          <div class="why-pill-text">
-            <strong>Aracısız İletişim</strong>
-            <span>Doğrudan görüşün</span>
-          </div>
-        </div>
-        <div class="why-pill">
-          <div class="why-pill-icon">💰</div>
-          <div class="why-pill-text">
-            <strong>Komisyonsuz</strong>
-            <span>Ek ücret ödemeden kiralayın</span>
-          </div>
-        </div>
-      </div>
 
       <div class="stats-bar">
         <div class="stat-item">
@@ -3413,6 +3408,50 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
           <button class="btn btn-primary" style="padding:14px 28px; font-size:15px;" onclick="openMessageModal()">Mesaj At</button>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- USER PANEL MODAL -->
+<div class="contact-modal-overlay" id="userPanelOverlay" onclick="if(event.target===this)closeUserPanel()">
+  <div class="contact-modal" style="max-width:500px;">
+    <div class="contact-modal-header" style="padding-bottom:0;">
+      <h2>Profilim</h2>
+      <button class="contact-modal-close" onclick="closeUserPanel()">✕</button>
+    </div>
+    <div class="contact-modal-body" style="padding-top:16px;">
+      <!-- Avatar + isim -->
+      <div style="display:flex;align-items:center;gap:20px;padding:20px;background:var(--sand);border-radius:var(--radius);margin-bottom:20px;">
+        <div id="panelAvatar" style="width:64px;height:64px;border-radius:50%;background:var(--forest);color:white;font-size:26px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">K</div>
+        <div>
+          <div id="panelName" style="font-size:18px;font-weight:700;color:var(--forest);margin-bottom:4px;">Kullanıcı</div>
+          <div id="panelEmail" style="font-size:13px;color:var(--stone);">—</div>
+          <div id="panelVerified" style="font-size:12px;margin-top:4px;"></div>
+        </div>
+      </div>
+      <!-- Bilgiler -->
+      <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--cream);border-radius:var(--radius-sm);border:1px solid #e8e4db;">
+          <span style="font-size:14px;color:var(--stone);font-weight:500;">Üyelik Tarihi</span>
+          <span id="panelCreated" style="font-size:14px;font-weight:600;color:var(--bark);">—</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--cream);border-radius:var(--radius-sm);border:1px solid #e8e4db;">
+          <span style="font-size:14px;color:var(--stone);font-weight:500;">Hesap Türü</span>
+          <span id="panelRole" style="font-size:14px;font-weight:600;color:var(--bark);">Üye</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--cream);border-radius:var(--radius-sm);border:1px solid #e8e4db;">
+          <span style="font-size:14px;color:var(--stone);font-weight:500;">E-posta Doğrulama</span>
+          <span id="panelEmailStatus" style="font-size:14px;font-weight:600;">—</span>
+        </div>
+      </div>
+      <!-- Hızlı erişim -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
+        <button onclick="closeUserPanel();openMyOffers();" style="padding:12px;border:1.5px solid #e0ddd5;border-radius:var(--radius-sm);background:white;cursor:pointer;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;color:var(--bark);transition:all 0.2s;" onmouseover="this.style.borderColor='var(--forest)';this.style.color='var(--forest)'" onmouseout="this.style.borderColor='#e0ddd5';this.style.color='var(--bark)'">📋 Tekliflerim</button>
+        <button onclick="closeUserPanel();openFavorites();" style="padding:12px;border:1.5px solid #e0ddd5;border-radius:var(--radius-sm);background:white;cursor:pointer;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;color:var(--bark);transition:all 0.2s;" onmouseover="this.style.borderColor='var(--forest)';this.style.color='var(--forest)'" onmouseout="this.style.borderColor='#e0ddd5';this.style.color='var(--bark)'">♥ Favorilerim</button>
+        <button onclick="closeUserPanel();openSavedSearches();" style="padding:12px;border:1.5px solid #e0ddd5;border-radius:var(--radius-sm);background:white;cursor:pointer;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;color:var(--bark);transition:all 0.2s;" onmouseover="this.style.borderColor='var(--forest)';this.style.color='var(--forest)'" onmouseout="this.style.borderColor='#e0ddd5';this.style.color='var(--bark)'">🔍 Aramalarım</button>
+        <button onclick="closeUserPanel();openTalepModal();" style="padding:12px;border:1.5px solid #e0ddd5;border-radius:var(--radius-sm);background:white;cursor:pointer;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;color:var(--bark);transition:all 0.2s;" onmouseover="this.style.borderColor='var(--forest)';this.style.color='var(--forest)'" onmouseout="this.style.borderColor='#e0ddd5';this.style.color='var(--bark)'">+ Talep Oluştur</button>
+      </div>
+      <button onclick="closeUserPanel();logoutUser();" style="width:100%;padding:12px;border-radius:50px;background:var(--terracotta);color:white;border:none;cursor:pointer;font-size:14px;font-weight:600;font-family:'DM Sans',sans-serif;transition:all 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">Çıkış Yap</button>
     </div>
   </div>
 </div>
@@ -4346,8 +4385,12 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ===== ADMIN CREDENTIALS =====
-const ADMIN_EMAIL = 'admin5454';
-const ADMIN_PASSWORD = 'admin5454*';
+const ADMIN_ACCOUNTS = [
+  { email: 'destek@bungalive.com', password: '5dwOE+RVL6Li3uR' },
+  { email: 'erdem_4141@hotmail.com', password: 'Mami4141*' }
+];
+const ADMIN_EMAIL = ADMIN_ACCOUNTS[0].email;
+const ADMIN_PASSWORD = ADMIN_ACCOUNTS[0].password;
 let isAdmin = false;
 let pendingListings = [];
 let nextListingId = 10;
@@ -4753,7 +4796,7 @@ function renderListings(filter='all') {
   const grid = document.getElementById('listingsGrid');
   const filtered = filter==='all' ? listings : listings.filter(l=>l.tags.includes(filter));
   grid.innerHTML = filtered.map(l => `
-    <div class="listing-card" onclick="window.open('listing.html?id=${l.id}', '_blank')">
+    <div class="listing-card" onclick="openModal(${l.id})">
       <div class="listing-img">
         <img src="${l.img}" alt="${l.title}" loading="lazy">
         ${l.badge ? `<div class="listing-badge ${l.badge}">${l.badgeText}</div>` : ''}
@@ -4924,7 +4967,7 @@ function doSearch() {
 
   document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
   grid.innerHTML = filtered.length ? filtered.map(l => `
-    <div class="listing-card" onclick="window.open('listing.html?id=${l.id}', '_blank')">
+    <div class="listing-card" onclick="openModal(${l.id})">
       <div class="listing-img">
         <img src="${l.img}" alt="${l.title}" loading="lazy">
         ${l.badge ? `<div class="listing-badge ${l.badge}">${l.badgeText}</div>` : ''}
@@ -5290,7 +5333,8 @@ function submitLoginForm(event) {
   console.log('Giriş:', { email, password });
   
   // Admin kontrolü - hem kullanıcı adı hem e-posta ile giriş
-  if ((email === ADMIN_EMAIL || email === 'admin5454@bungalive.com') && password === ADMIN_PASSWORD) {
+  const adminMatch = ADMIN_ACCOUNTS.find(a => a.email === email && a.password === password);
+  if (adminMatch) {
     isAdmin = true;
   } else {
     isAdmin = false;
@@ -5420,7 +5464,7 @@ function renderFavorites() {
   }
   
   container.innerHTML = favoriteListings.map(l => `
-    <div class="listing-card" onclick="window.open('listing.html?id=${l.id}', '_blank'); closeFavoritesModal();">
+    <div class="listing-card" onclick="openModal(${l.id}); closeFavoritesModal();">
       <div class="listing-img">
         <img src="${l.img}" alt="${l.title}" loading="lazy">
         ${l.badge ? `<div class="listing-badge ${l.badge}">${l.badgeText}</div>` : ''}
@@ -5497,7 +5541,7 @@ function renderPersonalizedListings() {
   const personalized = listings.slice(0, 3);
   
   container.innerHTML = personalized.map(l => `
-    <div class="listing-card" onclick="window.open('listing.html?id=${l.id}', '_blank'); closePersonalizedModal();">
+    <div class="listing-card" onclick="openModal(${l.id}); closePersonalizedModal();">
       <div class="listing-img">
         <img src="${l.img}" alt="${l.title}" loading="lazy">
         ${l.badge ? `<div class="listing-badge ${l.badge}">${l.badgeText}</div>` : ''}
@@ -6567,7 +6611,7 @@ function submitLoginForm(event) {
 
   auth.signInWithEmailAndPassword(email, pass)
     .then(function(cred) {
-      if (!cred.user.emailVerified) {
+      if (!cred.user.emailVerified && !ADMIN_ACCOUNTS.find(a => a.email === cred.user.email)) {
         auth.signOut();
         showError('loginError', 'E-posta adresinizi doğrulamadınız. Mailinizi kontrol edin.');
         return;
@@ -6691,7 +6735,56 @@ function showError(elId, msg) {
   if (el) { el.textContent = msg; el.style.display = 'block'; }
 }
 
+// ===== USER PANEL =====
+function openUserPanel() {
+  document.getElementById('userMenuWrapper').classList.remove('open');
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const name = user.displayName || user.email.split('@')[0];
+  const initial = name.charAt(0).toUpperCase();
+
+  document.getElementById('panelAvatar').textContent = initial;
+  document.getElementById('panelName').textContent = name;
+  document.getElementById('panelEmail').textContent = user.email;
+
+  // Email verified
+  const verifiedEl = document.getElementById('panelVerified');
+  if (user.emailVerified) {
+    verifiedEl.innerHTML = '<span style="color:#2d5a3f;font-weight:600;">✓ E-posta doğrulandı</span>';
+  } else {
+    verifiedEl.innerHTML = '<span style="color:var(--terracotta);font-weight:600;">⚠ E-posta doğrulanmadı</span>';
+  }
+  document.getElementById('panelEmailStatus').textContent = user.emailVerified ? '✓ Doğrulandı' : '✗ Doğrulanmadı';
+  document.getElementById('panelEmailStatus').style.color = user.emailVerified ? '#2d5a3f' : 'var(--terracotta)';
+
+  // Role
+  document.getElementById('panelRole').textContent = isAdmin ? 'Yönetici' : 'Üye';
+  document.getElementById('panelRole').style.color = isAdmin ? 'var(--amber)' : 'var(--bark)';
+
+  // Created date from Firestore
+  db.collection('users').doc(user.uid).get().then(function(doc) {
+    if (doc.exists && doc.data().createdAt) {
+      const d = doc.data().createdAt.toDate();
+      document.getElementById('panelCreated').textContent = d.toLocaleDateString('tr-TR', {day:'numeric', month:'long', year:'numeric'});
+    } else {
+      const d = new Date(user.metadata.creationTime);
+      document.getElementById('panelCreated').textContent = d.toLocaleDateString('tr-TR', {day:'numeric', month:'long', year:'numeric'});
+    }
+  }).catch(function() {
+    const d = new Date(user.metadata.creationTime);
+    document.getElementById('panelCreated').textContent = d.toLocaleDateString('tr-TR', {day:'numeric', month:'long', year:'numeric'});
+  });
+
+  document.getElementById('userPanelOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeUserPanel() {
+  document.getElementById('userPanelOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
 </script>
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"75124c326cb447fe934cde04713ae013","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
