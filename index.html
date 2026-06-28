@@ -56,13 +56,14 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
 .navbar.scrolled { box-shadow: var(--shadow-sm); }
 .nav-inner {
   max-width: 1340px; margin:0 auto;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 16px; height: 72px;
+  display: flex; align-items: center;
+  padding: 0 32px; height: 72px;
 }
 .logo {
   display: flex; align-items: center; gap: 12px;
   text-decoration: none; color: var(--forest);
   margin-left: 0;
+  flex-shrink: 0;
 }
 .logo-icon {
   width: 72px; height: 72px; border-radius: 50%;
@@ -97,7 +98,7 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
 }
 .nav-links a:hover::after { width:100%; }
 
-.nav-actions { display: flex; align-items: center; gap: 12px; }
+.nav-actions { display: flex; align-items: center; gap: 12px; margin-left: auto; }
 .btn {
   padding: 10px 22px; border-radius: 50px; font-weight: 600;
   font-size: 14px; cursor: pointer; border: none; transition: all 0.25s;
@@ -811,7 +812,7 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
   border-color: var(--forest); background: var(--forest); color: var(--white);
 }
 .listings-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr);
+  display: grid; grid-template-columns: repeat(5, 1fr);
   gap: 24px;
 }
 .listing-card {
@@ -819,18 +820,64 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
   transition: all 0.35s; cursor: pointer; position: relative;
 }
 .listing-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
-.listing-img {
+.listing-img-carousel {
   height: 240px; position: relative; overflow: hidden;
 }
-.listing-img img {
+.carousel-images {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.4s ease;
+}
+.carousel-images img {
   width: 100%; height: 100%; object-fit: cover;
+  flex-shrink: 0;
   transition: transform 0.5s;
 }
-.listing-card:hover .listing-img img { transform: scale(1.08); }
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.9);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--bark);
+  transition: all 0.2s;
+  opacity: 0;
+  z-index: 10;
+}
+.listing-img-carousel:hover .carousel-btn { opacity: 1; }
+.carousel-btn:hover { background: white; transform: translateY(-50%) scale(1.1); }
+.carousel-prev { left: 12px; }
+.carousel-next { right: 12px; }
+.carousel-dots {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  z-index: 10;
+}
+.carousel-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  transition: all 0.2s;
+}
+.carousel-dot.active { background: white; transform: scale(1.3); }
 .listing-badge {
   position: absolute; top: 14px; left: 14px;
   background: var(--terracotta); color: white;
   padding: 5px 14px; border-radius: 50px; font-size: 12px; font-weight: 700;
+  z-index: 10;
 }
 .listing-badge.premium { background: var(--amber); }
 .listing-fav {
@@ -839,6 +886,7 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
   background: rgba(255,255,255,0.9); border: none; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   font-size: 18px; transition: all 0.2s;
+  z-index: 10;
 }
 .listing-fav:hover { background: white; transform: scale(1.1); }
 .listing-fav.liked { color: #e74c3c; }
@@ -854,21 +902,44 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
 .listing-feat {
   font-size: 13px; color: var(--stone); display: flex; align-items: center; gap: 4px;
 }
-.listing-details {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px;
+.listing-host {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   margin-bottom: 14px;
   padding: 10px;
   background: var(--sand);
   border-radius: 8px;
 }
-.listing-detail {
-  font-size: 12px;
-  color: var(--bark);
+.host-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--forest);
+  color: white;
   display: flex;
   align-items: center;
-  gap: 4px;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.host-info {
+  flex: 1;
+}
+.host-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--bark);
+  line-height: 1.2;
+}
+.host-rating {
+  font-size: 12px;
+  color: var(--stone);
+  line-height: 1.2;
+}
+.host-rating::before {
+  content: '★ ';
+  color: var(--amber);
 }
 .listing-bottom {
   display: flex; justify-content: space-between; align-items: center;
@@ -3020,8 +3091,6 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
       <div class="logo-icon"><img src="logo.svg" alt="BungaLive Logo"></div>
       <div class="logo-text">Bunga<span>Live</span></div>
     </a>
-      <div class="nav-links">
-    </div>
     <div class="nav-actions">
       <button class="btn btn-amber" id="talepOlusturBtn" onclick="openTalepModal()" style="display:none;">+ Talep Oluştur</button>
       <button class="nav-notification-btn" id="navNotificationBtn" onclick="toggleNotifications(event)" style="display:none;">
@@ -4748,73 +4817,145 @@ const listings = [
     id:1, title:"Sapanca Göl Bungalov", city:"sapanca", tags:["gol","cift","jakuzi"], loc:"Sapanca, Sakarya",
     price:3200, rating:4.9, reviews:128, beds:2, guests:4, baths:1, sqm:65,
     badge:"premium", badgeText:"Premium",
-    img:"https://www.bizevdeyokuz.com/wp-content/uploads/sapanca-goldibikucuk-ev.jpg",
+    img:"https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=800",
+    images:[
+      "https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=800"
+    ],
     desc:"Sapanca Gölü kıyısında, doğayla iç içe şık bir bungalov. Özel teras, şömine ve jakuzi ile konforlu bir tatil deneyimi. Göl manzarası ve orman yürüyüş parkurlarına yakın.",
-    centerDistance:"2.5 km", marketDistance:"500 m", breakfast:true, payment:"card"
+    centerDistance:"2.5 km", marketDistance:"500 m", breakfast:true, payment:"card",
+    host:{name:"Ahmet Yılmaz",avatar:"AY",rating:4.8,years:3,listings:5}
   },
   {
     id:2, title:"Sapanca Üçgen Bungalov", city:"sapanca", tags:["aile","havuzlu"], loc:"Sapanca, Sakarya",
     price:4500, rating:4.8, reviews:96, beds:3, guests:6, baths:2, sqm:95,
     badge:"premium", badgeText:"En Çok Tercih Edilen",
-    img:"https://www.bizevdeyokuz.com/wp-content/uploads/sapanca-ucgen-ev-2.jpg",
+    img:"https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=800",
+    images:[
+      "https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=800"
+    ],
     desc:"Modern mimarisiyle dikkat çeken üçgen bungalov. 3 yatak odası, tam donanımlı mutfak, özel havuz ve geniş bahçe. Aileler ve arkadaş grupları için ideal.",
-    centerDistance:"3.2 km", marketDistance:"800 m", breakfast:false, payment:"both"
+    centerDistance:"3.2 km", marketDistance:"800 m", breakfast:false, payment:"both",
+    host:{name:"Mehmet Kaya",avatar:"MK",rating:4.9,years:5,listings:3}
   },
   {
     id:3, title:"Sapanca Orman Bungalov", city:"sapanca", tags:["orman","aile","kahvalti"], loc:"Sapanca, Sakarya",
     price:2100, rating:4.9, reviews:203, beds:2, guests:4, baths:1, sqm:55,
     badge:"premium", badgeText:"Doğa İçinde",
-    img:"https://www.bizevdeyokuz.com/wp-content/uploads/istanbuldere-ahsap-ev-sapanca.jpg",
+    img:"https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=800",
+    images:[
+      "https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=800"
+    ],
     desc:"Ormanın kalbinde, ahşap dokusuyla sıcak bir atmosfer sunan bungalov. Kuş sesleriyle uyanın, doğa yürüyüşlerine çıkın. Organik kahvaltı dahil.",
-    centerDistance:"5.1 km", marketDistance:"1.2 km", breakfast:true, payment:"cash"
+    centerDistance:"5.1 km", marketDistance:"1.2 km", breakfast:true, payment:"cash",
+    host:{name:"Zeynep Demir",avatar:"ZD",rating:4.7,years:2,listings:2}
   },
   {
     id:4, title:"Havuzlu Lüks Bungalov", city:"sapanca", tags:["luks","havuzlu","cift","jakuzi"], loc:"Sapanca, Sakarya",
     price:5800, rating:5.0, reviews:87, beds:3, guests:6, baths:2, sqm:120,
     badge:"premium", badgeText:"Lüks",
-    img:"https://www.bungalovyolu.com/uploads/WhatsApp-image-2024-05-05-at-15-26-07_402.jpeg",
+    img:"https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=800",
+    images:[
+      "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1396132/pexels-photo-1396132.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=800"
+    ],
     desc:"Özel ısıtmalı havuzu, jakuzisi ve şöminesiyle lüks bir kaçamak. Modern iç tasarımı, geniş yaşam alanı ve muhteşem doğa manzarası. Balayı çiftleri için ideal.",
-    centerDistance:"1.8 km", marketDistance:"300 m", breakfast:true, payment:"card"
+    centerDistance:"1.8 km", marketDistance:"300 m", breakfast:true, payment:"card",
+    host:{name:"Ali Öztürk",avatar:"AÖ",rating:5.0,years:4,listings:1}
   },
   {
     id:5, title:"Sapanca Teras Bungalov", city:"sapanca", tags:["gol","aile"], loc:"Sapanca, Sakarya",
     price:3750, rating:4.7, reviews:154, beds:2, guests:4, baths:1, sqm:70,
     badge:"", badgeText:"",
-    img:"https://www.bungalovilla.com/upload/catalog/186/1200/sapanca-teras-bungalov-84.jpg?22",
+    img:"https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=800",
+    images:[
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=800"
+    ],
     desc:"Geniş terasıyla Sapanca'nın eşsiz manzarasını seyredin. Ahşap dekorasyon, şömine ve tam donanımlı mutfak. Doğa yürüyüşü ve göl turu imkanı.",
-    centerDistance:"2.0 km", marketDistance:"600 m", breakfast:false, payment:"both"
+    centerDistance:"2.0 km", marketDistance:"600 m", breakfast:false, payment:"both",
+    host:{name:"Fatma Şahin",avatar:"FŞ",rating:4.6,years:1,listings:4}
   },
   {
     id:6, title:"Sapanca Doğa Bungalov", city:"sapanca", tags:["orman","aile","evcil"], loc:"Sapanca, Sakarya",
     price:2400, rating:4.8, reviews:176, beds:2, guests:5, baths:1, sqm:60,
     badge:"", badgeText:"",
-    img:"https://cdn.trav3l.net/sapancakonaklamarehberi.com/uploads/sapanca-bungalov-evleri-fiyatlari.jpeg",
+    img:"https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=800",
+    images:[
+      "https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=800"
+    ],
     desc:"Yemyeşil orman içinde, huzurlu bir konaklama. Aileler için geniş yaşam alanı, mangal alanı ve çocuk oyun parkı. Evcil hayvan dostu.",
-    centerDistance:"4.5 km", marketDistance:"1.5 km", breakfast:false, payment:"cash"
+    centerDistance:"4.5 km", marketDistance:"1.5 km", breakfast:false, payment:"cash",
+    host:{name:"Can Arslan",avatar:"CA",rating:4.8,years:3,listings:2}
   },
   {
     id:7, title:"Sapanca Göl Manzaralı Bungalov", city:"sapanca", tags:["gol","cift"], loc:"Sapanca, Sakarya",
     price:2800, rating:4.6, reviews:211, beds:1, guests:2, baths:1, sqm:40,
     badge:"", badgeText:"",
-    img:"https://www.seninvillan.com.tr/assets/images/blog/big/sapanca-bungalov-ev_1.jpg",
+    img:"https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=800",
+    images:[
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1396132/pexels-photo-1396132.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=800"
+    ],
     desc:"Sapanca Gölü manzarasına bakan romantik bungalov. Özel balkon, kayık imkanı ve muhteşem gün batımı. Çiftler için huzurlu bir kaçış noktası.",
-    centerDistance:"2.8 km", marketDistance:"700 m", breakfast:true, payment:"card"
+    centerDistance:"2.8 km", marketDistance:"700 m", breakfast:true, payment:"card",
+    host:{name:"Elif Yıldız",avatar:"EY",rating:4.5,years:2,listings:3}
   },
   {
     id:8, title:"Sapanca Villa Bungalov", city:"sapanca", tags:["luks","havuzlu","aile","merkezi"], loc:"Sapanca, Sakarya",
     price:4100, rating:4.9, reviews:143, beds:3, guests:6, baths:2, sqm:85,
     badge:"premium", badgeText:"Yeni",
-    img:"https://cdn.hellovillam.com/HelloVillam/images/w600/bungalov-mezit-2-1-oda-4-kisi-175221.jpg",
+    img:"https://images.pexels.com/photos/1396132/pexels-photo-1396132.jpeg?auto=compress&cs=tinysrgb&w=800",
+    images:[
+      "https://images.pexels.com/photos/1396132/pexels-photo-1396132.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=800"
+    ],
     desc:"Villa konforunda bungalov deneyimi. Özel havuz, BBQ alanı, geniş bahçe ve panoramik dağ manzarası. Kalabalık gruplar için ideal.",
-    centerDistance:"1.2 km", marketDistance:"200 m", breakfast:true, payment:"card"
+    centerDistance:"1.2 km", marketDistance:"200 m", breakfast:true, payment:"card",
+    host:{name:"Burak Korkmaz",avatar:"BK",rating:4.9,years:6,listings:2}
   },
   {
     id:9, title:"Sapanca Dere Kenarı Bungalov", city:"sapanca", tags:["orman","aile"], loc:"Sapanca, Sakarya",
     price:1950, rating:4.7, reviews:89, beds:2, guests:4, baths:1, sqm:50,
     badge:"", badgeText:"",
-    img:"https://www.bungalovilla.com/upload/catalog/293/610/400/sapanca-terra-bungalov-780.jpg?22",
+    img:"https://images.pexels.com/photos/259580/pexels-photo-259580.jpeg?auto=compress&cs=tinysrgb&w=800",
+    images:[
+      "https://images.pexels.com/photos/259580/pexels-photo-259580.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=800"
+    ],
     desc:"Dere kenarında, doğanın sesleriyle çevrili huzurlu bungalov. Balık tutma imkanı, mangal alanı ve çocuklar için güvenli oyun alanı. Fiyat-performans odaklı.",
-    centerDistance:"6.0 km", marketDistance:"2.0 km", breakfast:false, payment:"cash"
+    centerDistance:"6.0 km", marketDistance:"2.0 km", breakfast:false, payment:"cash",
+    host:{name:"Selin Aydın",avatar:"SA",rating:4.7,years:2,listings:1}
   }
 ];
 
@@ -4822,12 +4963,21 @@ const listings = [
 function renderListings(filter='all') {
   const grid = document.getElementById('listingsGrid');
   const filtered = filter==='all' ? listings : listings.filter(l=>l.tags.includes(filter));
-  grid.innerHTML = filtered.map(l => `
-    <div class="listing-card" onclick="window.open('listing.html?id='+${l.id},'_blank')" style="cursor:pointer;">
-      <div class="listing-img">
-        <img src="${l.img}" alt="${l.title}" loading="lazy">
+  grid.innerHTML = filtered.map((l, idx) => `
+    <div class="listing-card" onclick="window.open('listing.html?id=${l.id}', '_blank')" style="cursor:pointer;">
+      <div class="listing-img-carousel" id="carousel-${l.id}">
+        <div class="carousel-images" style="transform: translateX(0%)">
+          ${l.images.map(img => `<img src="${img}" alt="${l.title}" loading="lazy">`).join('')}
+        </div>
         ${l.badge ? `<div class="listing-badge ${l.badge}">${l.badgeText}</div>` : ''}
         <button class="listing-fav" onclick="event.stopPropagation(); toggleFav(this, ${l.id})">♡</button>
+        ${l.images.length > 1 ? `
+        <button class="carousel-btn carousel-prev" onclick="event.stopPropagation(); moveCarousel(${l.id}, -1)">‹</button>
+        <button class="carousel-btn carousel-next" onclick="event.stopPropagation(); moveCarousel(${l.id}, 1)">›</button>
+        <div class="carousel-dots">
+          ${l.images.map((_, i) => `<span class="carousel-dot ${i===0?'active':''}" data-index="${i}"></span>`).join('')}
+        </div>
+        ` : ''}
       </div>
       <div class="listing-info">
         <div class="listing-loc">📍 ${l.loc}</div>
@@ -4837,12 +4987,6 @@ function renderListings(filter='all') {
           <span class="listing-feat">👥 ${l.guests} Kişi</span>
           <span class="listing-feat">📐 ${l.sqm}m²</span>
         </div>
-        <div class="listing-details">
-          <span class="listing-detail">🏙️ Merkeze ${l.centerDistance}</span>
-          <span class="listing-detail">🛒 Market ${l.marketDistance}</span>
-          <span class="listing-detail">${l.breakfast ? '🍳 Kahvaltı Dahil' : '❌ Kahvaltı Yok'}</span>
-          <span class="listing-detail">${l.payment === 'card' ? '💳 Kredi Kartı' : l.payment === 'cash' ? '💵 Nakit' : '💳💵 Her İkisi'}</span>
-        </div>
         <div class="listing-bottom">
           <div class="listing-price">₺${l.price.toLocaleString('tr-TR')} <span>/gece</span></div>
           <div class="listing-rating"><span class="star">★</span> ${l.rating} (${l.reviews})</div>
@@ -4850,6 +4994,40 @@ function renderListings(filter='all') {
       </div>
     </div>
   `).join('');
+  
+  // Initialize carousel positions
+  filtered.forEach(l => {
+    if (!carouselPositions[l.id]) carouselPositions[l.id] = 0;
+  });
+}
+
+// Carousel functionality
+let carouselPositions = {};
+
+function moveCarousel(listingId, direction) {
+  const listing = listings.find(l => l.id === listingId);
+  if (!listing || !listing.images) return;
+  
+  const totalImages = listing.images.length;
+  let currentPos = carouselPositions[listingId] || 0;
+  
+  currentPos += direction;
+  if (currentPos < 0) currentPos = totalImages - 1;
+  if (currentPos >= totalImages) currentPos = 0;
+  
+  carouselPositions[listingId] = currentPos;
+  
+  const carousel = document.getElementById(`carousel-${listingId}`);
+  if (carousel) {
+    const imagesContainer = carousel.querySelector('.carousel-images');
+    imagesContainer.style.transform = `translateX(-${currentPos * 100}%)`;
+    
+    // Update dots
+    const dots = carousel.querySelectorAll('.carousel-dot');
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === currentPos);
+    });
+  }
 }
 
 // ===== FILTER =====
