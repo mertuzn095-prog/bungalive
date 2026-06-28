@@ -2683,7 +2683,7 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
   padding: 10px 12px;
   border: 1.5px solid #e0ddd5; border-radius: 10px;
   cursor: pointer; transition: all 0.2s;
-  font-size: 13px; font-weight: 500;
+  font-size: 13px; font-weight: 500; justify-content: space-between;
 }
 .talep-filter-item:hover { border-color: var(--leaf); background: var(--sand); }
 .talep-filter-item.checked {
@@ -2691,6 +2691,11 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
   background: rgba(26,60,42,0.05);
 }
 .talep-filter-item input { display: none; }
+.talep-filter-check {
+  font-size: 13px; font-weight: 800; color: var(--forest);
+  opacity: 0; transition: opacity 0.15s; flex-shrink: 0;
+}
+.talep-filter-item.checked .talep-filter-check { opacity: 1; }
 .talep-budget-display {
   display: flex; align-items: center; gap: 12px;
 }
@@ -2710,6 +2715,84 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
   border-radius: 0 0 24px 24px;
 }
 .talep-footer-info { font-size: 13px; color: var(--stone); }
+
+/* Step indicator */
+.talep-steps {
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px 32px 0; gap: 0;
+}
+.talep-step {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+.step-circle {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 2px solid #d0cdc5; background: var(--white);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; color: var(--stone);
+  transition: all 0.3s;
+}
+.talep-step.active .step-circle {
+  border-color: var(--forest); background: var(--forest); color: white;
+}
+.talep-step.done .step-circle {
+  border-color: var(--forest); background: var(--forest); color: white;
+}
+.step-label {
+  font-size: 11px; font-weight: 600; color: var(--stone);
+  white-space: nowrap;
+}
+.talep-step.active .step-label { color: var(--forest); }
+.step-line {
+  flex: 1; height: 2px; background: #d0cdc5; margin: 0 8px; margin-bottom: 20px;
+  min-width: 40px; transition: background 0.3s;
+}
+.step-line.done { background: var(--forest); }
+
+/* Talep counter */
+.talep-counter-row {
+  display: flex; align-items: center; gap: 16px; margin-top: 8px;
+}
+.talep-date-field {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 14px; border: 1.5px solid #d0cdc5; border-radius: 12px;
+  cursor: pointer; background: var(--white); transition: border-color 0.2s;
+  font-size: 14px; color: var(--stone); font-family: 'DM Sans', sans-serif;
+}
+.talep-date-field:hover { border-color: var(--forest); }
+.talep-date-field.has-value { color: var(--bark); font-weight: 500; }
+.talep-counter-btn {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 2px solid var(--forest); background: var(--white);
+  font-size: 22px; font-weight: 700; cursor: pointer; color: var(--forest);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s; font-family: 'DM Sans', sans-serif;
+}
+.talep-counter-btn:hover { background: var(--forest); color: white; }
+.talep-counter-val {
+  font-size: 22px; font-weight: 700; color: var(--forest);
+  min-width: 28px; text-align: center;
+}
+
+/* Budget range labels */
+.budget-range-labels {
+  display: flex; justify-content: space-between;
+  font-size: 12px; color: var(--stone); margin-top: 4px;
+}
+
+/* All prices button */
+.talep-all-prices-btn {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 16px; border-radius: 12px;
+  border: 2px dashed var(--sage); background: transparent;
+  color: var(--forest); font-size: 13px; font-weight: 600;
+  cursor: pointer; margin-top: 12px; width: 100%;
+  font-family: 'DM Sans', sans-serif; transition: all 0.2s;
+}
+.talep-all-prices-btn:hover { background: rgba(26,60,42,0.04); border-color: var(--forest); }
+.talep-all-prices-btn.selected {
+  background: rgba(26,60,42,0.06); border-color: var(--forest); border-style: solid;
+}
+.all-prices-icon { flex-shrink: 0; display: flex; align-items: center; }
 
 /* ===== TEKLİFLERİM MODAL ===== */
 .offers-modal-overlay {
@@ -4128,105 +4211,167 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
 <div class="talep-modal-overlay" id="talepModalOverlay" onclick="if(event.target===this) closeTalepModal()">
   <div class="talep-modal">
     <div class="talep-modal-header">
-      <h2>Talep Oluştur</h2>
-      <p>Tercihlerinizi belirleyin, ev sahipleri size teklif versin</p>
+      <div>
+        <h2>Talep Oluştur</h2>
+        <p>Tercihlerinizi belirleyin, ev sahipleri size teklif versin</p>
+      </div>
       <button class="talep-close" onclick="closeTalepModal()">✕</button>
     </div>
+
+    <!-- STEP INDICATOR -->
+    <div class="talep-steps">
+      <div class="talep-step active" id="stepInd1">
+        <div class="step-circle">1</div>
+        <div class="step-label">Tarih & Kişi</div>
+      </div>
+      <div class="step-line"></div>
+      <div class="talep-step" id="stepInd2">
+        <div class="step-circle">2</div>
+        <div class="step-label">Tercihler</div>
+      </div>
+      <div class="step-line"></div>
+      <div class="talep-step" id="stepInd3">
+        <div class="step-circle">3</div>
+        <div class="step-label">Notlar</div>
+      </div>
+    </div>
+
     <form class="talep-form" id="talepForm" onsubmit="submitTalep(event)">
-      <div class="form-section">
-        <div class="form-section-title">Konaklama Bilgileri</div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Giriş Tarihi <span class="required">*</span></label>
-            <input type="date" name="talep-checkin" required>
-          </div>
-          <div class="form-group">
-            <label>Çıkış Tarihi <span class="required">*</span></label>
-            <input type="date" name="talep-checkout" required>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Yetişkin Sayısı <span class="required">*</span></label>
-            <select name="talep-adults" required>
-              <option value="">Seçiniz</option>
-              <option value="1">1 Kişi</option>
-              <option value="2">2 Kişi</option>
-              <option value="3">3 Kişi</option>
-              <option value="4">4 Kişi</option>
-              <option value="5">5 Kişi</option>
-              <option value="6">6+ Kişi</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Çocuk Sayısı</label>
-            <select name="talep-children">
-              <option value="0">Yok</option>
-              <option value="1">1 Çocuk</option>
-              <option value="2">2 Çocuk</option>
-              <option value="3">3 Çocuk</option>
-              <option value="4">4+ Çocuk</option>
-            </select>
+
+      <!-- STEP 1 -->
+      <div class="talep-step-content" id="talepStep1">
+        <div class="form-section">
+          <div class="form-section-title">Konaklama Tarihleri</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Giriş Tarihi <span class="required">*</span></label>
+              <div class="talep-date-field" id="talepCheckinField" onclick="openTalepDatePicker('checkin', this)">
+                <span id="talepCheckinDisplay">Tarih seçin</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--forest)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              </div>
+              <input type="hidden" name="talep-checkin" id="talepCheckin">
+            </div>
+            <div class="form-group">
+              <label>Çıkış Tarihi <span class="required">*</span></label>
+              <div class="talep-date-field" id="talepCheckoutField" onclick="openTalepDatePicker('checkout', this)">
+                <span id="talepCheckoutDisplay">Tarih seçin</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--forest)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              </div>
+              <input type="hidden" name="talep-checkout" id="talepCheckout">
+            </div>
           </div>
         </div>
-      </div>
-      <div class="form-section">
-        <div class="form-section-title">Tercihler</div>
-        <div class="talep-filter-grid">
-          <label class="talep-filter-item" onclick="toggleTalepFilter(this)">
-            <input type="checkbox" name="talep-filters" value="havuz">
-            <span>🏊 Havuz</span>
-          </label>
-          <label class="talep-filter-item" onclick="toggleTalepFilter(this)">
-            <input type="checkbox" name="talep-filters" value="jakuzi">
-            <span>🛁 Jakuzi</span>
-          </label>
-          <label class="talep-filter-item" onclick="toggleTalepFilter(this)">
-            <input type="checkbox" name="talep-filters" value="sofmine">
-            <span>🔥 Şömine</span>
-          </label>
-          <label class="talep-filter-item" onclick="toggleTalepFilter(this)">
-            <input type="checkbox" name="talep-filters" value="evcil">
-            <span>🐾 Evcil Hayvan</span>
-          </label>
-          <label class="talep-filter-item" onclick="toggleTalepFilter(this)">
-            <input type="checkbox" name="talep-filters" value="gol-manzara">
-            <span>🏞️ Göl Manzaralı</span>
-          </label>
-          <label class="talep-filter-item" onclick="toggleTalepFilter(this)">
-            <input type="checkbox" name="talep-filters" value="kahvalti">
-            <span>🍳 Kahvaltı Dahil</span>
-          </label>
-        </div>
-      </div>
-      <div class="form-section">
-        <div class="form-section-title">Bütçe</div>
-        <div class="form-row single">
-          <div class="form-group">
-            <label>Gecelik Maksimum Bütçe</label>
-            <div class="talep-budget-display">
-              <input type="range" name="talep-budget" min="500" max="15000" step="500" value="5000" oninput="updateBudgetDisplay(this)">
-              <span class="talep-budget-val" id="budgetDisplay">₺5.000</span>
+        <div class="form-section">
+          <div class="form-section-title">Misafir Sayısı</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Yetişkin <span class="required">*</span></label>
+              <div class="talep-counter-row">
+                <button type="button" class="talep-counter-btn" onclick="changeTalepCount('adults',-1)">−</button>
+                <span class="talep-counter-val" id="talepAdultsVal">2</span>
+                <button type="button" class="talep-counter-btn" onclick="changeTalepCount('adults',1)">+</button>
+              </div>
+              <input type="hidden" name="talep-adults" id="talepAdults" value="2">
+            </div>
+            <div class="form-group">
+              <label>Çocuk</label>
+              <div class="talep-counter-row">
+                <button type="button" class="talep-counter-btn" onclick="changeTalepCount('children',-1)">−</button>
+                <span class="talep-counter-val" id="talepChildrenVal">0</span>
+                <button type="button" class="talep-counter-btn" onclick="changeTalepCount('children',1)">+</button>
+              </div>
+              <input type="hidden" name="talep-children" id="talepChildren" value="0">
             </div>
           </div>
         </div>
       </div>
-      <div class="form-section">
-        <div class="form-section-title">Ek Notlar</div>
-        <div class="form-row single">
+
+      <!-- STEP 2 -->
+      <div class="talep-step-content" id="talepStep2" style="display:none;">
+        <div class="form-section">
+          <div class="form-section-title">Tercihler</div>
+          <div class="talep-filter-grid">
+            <label class="talep-filter-item" onclick="toggleTalepFilter(this)">
+              <input type="checkbox" name="talep-filters" value="havuz">
+              <span>🏊 Havuz</span>
+              <span class="talep-filter-check">✓</span>
+            </label>
+            <label class="talep-filter-item" onclick="toggleTalepFilter(this)">
+              <input type="checkbox" name="talep-filters" value="jakuzi">
+              <span>🛁 Jakuzi</span>
+              <span class="talep-filter-check">✓</span>
+            </label>
+            <label class="talep-filter-item" onclick="toggleTalepFilter(this)">
+              <input type="checkbox" name="talep-filters" value="sofmine">
+              <span>🕌 Muhafazakar</span>
+              <span class="talep-filter-check">✓</span>
+            </label>
+            <label class="talep-filter-item" onclick="toggleTalepFilter(this)">
+              <input type="checkbox" name="talep-filters" value="evcil">
+              <span>🐾 Evcil Hayvan</span>
+              <span class="talep-filter-check">✓</span>
+            </label>
+            <label class="talep-filter-item" onclick="toggleTalepFilter(this)">
+              <input type="checkbox" name="talep-filters" value="gol-manzara">
+              <span>🏞️ Göl Manzaralı</span>
+              <span class="talep-filter-check">✓</span>
+            </label>
+            <label class="talep-filter-item" onclick="toggleTalepFilter(this)">
+              <input type="checkbox" name="talep-filters" value="kahvalti">
+              <span>🌿 Doğa Manzaralı</span>
+              <span class="talep-filter-check">✓</span>
+            </label>
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title">Bütçe</div>
+          <div id="budgetSection">
+            <div class="form-group">
+              <label>Gecelik Maksimum Bütçe</label>
+              <div class="talep-budget-display">
+                <input type="range" name="talep-budget" id="talepBudgetRange" min="4000" max="50000" step="1000" value="10000" oninput="updateBudgetDisplay(this)">
+                <span class="talep-budget-val" id="budgetDisplay">₺10.000</span>
+              </div>
+              <div class="budget-range-labels">
+                <span>₺4.000</span>
+                <span>₺50.000</span>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="talep-all-prices-btn" id="allPricesBtn" onclick="toggleAllPrices()">
+            <span class="all-prices-icon" id="allPricesBtnIcon">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" stroke="var(--forest)" stroke-width="1.8"/></svg>
+            </span>
+            Tüm fiyat tekliflerini gör (bütçe belirtme)
+          </button>
+          <input type="hidden" name="talep-no-budget" id="talepNoBudget" value="0">
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="talep-step-content" id="talepStep3" style="display:none;">
+        <div class="form-section">
+          <div class="form-section-title">Ek Notlar</div>
           <div class="form-group">
             <label>Özel İstekleriniz</label>
-            <textarea name="talep-notes" placeholder="Örn: Balayı için arıyoruz, sessiz bir konum tercih ediyoruz..."></textarea>
+            <textarea name="talep-notes" rows="5" placeholder="Örn: Balayı için arıyoruz, sessiz bir konum tercih ediyoruz, çocuklar için güvenli olsun..."></textarea>
+          </div>
+          <div style="margin-top:16px; padding:16px; background:var(--cream); border-radius:12px;">
+            <div style="font-size:13px; color:var(--stone); line-height:1.6;">
+              * Talebiniz bölgedeki tüm ev sahiplerine iletilecektir
+            </div>
           </div>
         </div>
       </div>
+
     </form>
+
+    <!-- FOOTER NAVİGASYON -->
     <div class="talep-footer">
-      <div class="talep-footer-info">* Talebiniz bölgedeki tüm ev sahiplerine iletilecektir</div>
-      <div style="display:flex; gap:10px;">
-        <button class="btn btn-outline" onclick="closeTalepModal()">İptal</button>
-        <button class="btn btn-amber" onclick="document.getElementById('talepForm').requestSubmit()">Talebi Yayınla</button>
-      </div>
+      <button class="btn btn-outline" id="talepBackBtn" onclick="talepStepBack()" style="display:none;">← Geri</button>
+      <button class="btn btn-outline" id="talepCancelBtn" onclick="closeTalepModal()">İptal</button>
+      <button class="btn btn-amber" id="talepNextBtn" onclick="talepStepNext()">Devam Et →</button>
+      <button class="btn btn-amber" id="talepSubmitBtn" onclick="document.getElementById('talepForm').requestSubmit()" style="display:none;">Talebi Yayınla</button>
     </div>
   </div>
 </div>
@@ -5786,7 +5931,8 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ===== ENTER KEY SEARCH =====
-document.querySelector('.search-box').addEventListener('keydown', (e) => {
+const _searchBox = document.querySelector('.search-box');
+if (_searchBox) _searchBox.addEventListener('keydown', (e) => {
   if(e.key === 'Enter') doSearch();
 });
 
@@ -6010,7 +6156,36 @@ let nextOfferId = 1;
 let nextNotificationId = 1;
 
 // Talep Modal
+let talepCurrentStep = 1;
+let talepAdultsCount = 2;
+let talepChildrenCount = 0;
+let talepNoBudget = false;
+
 function openTalepModal() {
+  talepCurrentStep = 1;
+  talepAdultsCount = 2;
+  talepChildrenCount = 0;
+  talepNoBudget = false;
+  document.getElementById('talepAdultsVal').textContent = 2;
+  document.getElementById('talepChildrenVal').textContent = 0;
+  document.getElementById('talepAdults').value = 2;
+  document.getElementById('talepChildren').value = 0;
+  document.getElementById('talepCheckin').value = '';
+  document.getElementById('talepCheckout').value = '';
+  document.getElementById('talepCheckinDisplay').textContent = 'Tarih seçin';
+  document.getElementById('talepCheckoutDisplay').textContent = 'Tarih seçin';
+  document.getElementById('talepCheckinField').classList.remove('has-value');
+  document.getElementById('talepCheckoutField').classList.remove('has-value');
+  document.getElementById('talepBudgetRange').value = 10000;
+  document.getElementById('budgetDisplay').textContent = '₺10.000';
+  document.getElementById('budgetSection').style.display = '';
+  document.getElementById('allPricesBtn').classList.remove('selected');
+  document.getElementById('allPricesBtnIcon').innerHTML = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" stroke="var(--forest)" stroke-width="1.8"/></svg>';
+  document.getElementById('talepNoBudget').value = '0';
+  document.querySelectorAll('.talep-filter-item').forEach(i => i.classList.remove('checked'));
+  document.querySelectorAll('.talep-filter-item input').forEach(i => i.checked = false);
+  document.querySelector('[name="talep-notes"]').value = '';
+  renderTalepStep();
   document.getElementById('talepModalOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -6018,7 +6193,148 @@ function openTalepModal() {
 function closeTalepModal() {
   document.getElementById('talepModalOverlay').classList.remove('open');
   document.body.style.overflow = '';
+  closeTalepDatePicker();
 }
+
+// ===== TALEP DATE PICKER =====
+let tdpMode = 'checkin', tdpYear, tdpMonth;
+const TDP_MONTHS = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+const TDP_DAYS = ['Pt','Sa','Ça','Pe','Cu','Ct','Pa'];
+
+function openTalepDatePicker(mode, field) {
+  tdpMode = mode;
+  const now = new Date();
+  tdpYear = now.getFullYear(); tdpMonth = now.getMonth();
+  const popup = document.getElementById('talepDatePickerPopup');
+  renderTdpGrid();
+  const rect = field.getBoundingClientRect();
+  popup.style.top = (rect.bottom + 6) + 'px';
+  const left = Math.min(rect.left, window.innerWidth - 320);
+  popup.style.left = Math.max(8, left) + 'px';
+  popup.style.display = 'block';
+}
+function closeTalepDatePicker() {
+  document.getElementById('talepDatePickerPopup').style.display = 'none';
+}
+function tdpPrev() { tdpMonth--; if(tdpMonth<0){tdpMonth=11;tdpYear--;} renderTdpGrid(); }
+function tdpNext() { tdpMonth++; if(tdpMonth>11){tdpMonth=0;tdpYear++;} renderTdpGrid(); }
+function tdpFmt(d) { return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function tdpFmtShort(d) { return String(d.getDate()).padStart(2,'0')+' '+TDP_MONTHS[d.getMonth()].slice(0,3); }
+
+function tdpSelectDay(y, m, d) {
+  const sel = new Date(y, m, d);
+  const today = new Date(); today.setHours(0,0,0,0);
+  if (sel < today) return;
+  if (tdpMode === 'checkin') {
+    document.getElementById('talepCheckin').value = tdpFmt(sel);
+    document.getElementById('talepCheckinDisplay').textContent = tdpFmtShort(sel);
+    document.getElementById('talepCheckinField').classList.add('has-value');
+    closeTalepDatePicker();
+    // otomatik çıkış tarihini aç
+    setTimeout(() => {
+      const checkout = document.getElementById('talepCheckoutField');
+      openTalepDatePicker('checkout', checkout);
+    }, 150);
+  } else {
+    const checkin = document.getElementById('talepCheckin').value;
+    if (checkin && sel <= new Date(checkin)) { alert('Çıkış tarihi giriş tarihinden sonra olmalıdır.'); return; }
+    document.getElementById('talepCheckout').value = tdpFmt(sel);
+    document.getElementById('talepCheckoutDisplay').textContent = tdpFmtShort(sel);
+    document.getElementById('talepCheckoutField').classList.add('has-value');
+    closeTalepDatePicker();
+  }
+}
+
+function renderTdpGrid() {
+  document.getElementById('tdpMonthLabel').textContent = TDP_MONTHS[tdpMonth] + ' ' + tdpYear;
+  const grid = document.getElementById('tdpGrid');
+  const today = new Date(); today.setHours(0,0,0,0);
+  const checkinVal = document.getElementById('talepCheckin').value;
+  const checkoutVal = document.getElementById('talepCheckout').value;
+  const checkinDate = checkinVal ? new Date(checkinVal) : null;
+  const checkoutDate = checkoutVal ? new Date(checkoutVal) : null;
+  let html = TDP_DAYS.map(d => `<div style="font-size:11px;font-weight:700;color:var(--stone);padding:5px 0;">${d}</div>`).join('');
+  const firstDay = new Date(tdpYear, tdpMonth, 1).getDay();
+  const offset = firstDay === 0 ? 6 : firstDay - 1;
+  const total = new Date(tdpYear, tdpMonth + 1, 0).getDate();
+  for (let i = 0; i < offset; i++) html += '<div></div>';
+  for (let d = 1; d <= total; d++) {
+    const date = new Date(tdpYear, tdpMonth, d);
+    const past = date < today;
+    const isIn = checkinDate && date.getTime() === checkinDate.getTime();
+    const isOut = checkoutDate && date.getTime() === checkoutDate.getTime();
+    const inRange = checkinDate && checkoutDate && date > checkinDate && date < checkoutDate;
+    let bg = 'transparent', col = past ? '#ccc' : 'var(--bark)', br = '50%', cur = past ? 'default' : 'pointer';
+    if (isIn || isOut) { bg = 'var(--forest)'; col = '#fff'; }
+    else if (inRange) { bg = '#d4e9d8'; col = 'var(--forest)'; br = '0'; }
+    const hover = !past && !isIn && !isOut ? `onmouseover="this.style.background='var(--cream)'" onmouseout="this.style.background='${bg}'"` : '';
+    html += `<div onclick="event.stopPropagation();${past?'':` tdpSelectDay(${tdpYear},${tdpMonth},${d})`}" ${hover} style="padding:6px 2px;border-radius:${br};background:${bg};color:${col};font-size:13px;font-weight:600;cursor:${cur};transition:background 0.12s;">${d}</div>`;
+  }
+  grid.innerHTML = html;
+}
+document.addEventListener('click', e => {
+  const popup = document.getElementById('talepDatePickerPopup');
+  if (popup && popup.style.display === 'block' &&
+      !popup.contains(e.target) &&
+      !document.getElementById('talepCheckinField')?.contains(e.target) &&
+      !document.getElementById('talepCheckoutField')?.contains(e.target)) {
+    closeTalepDatePicker();
+  }
+});
+
+function renderTalepStep() {
+  [1,2,3].forEach(n => {
+    document.getElementById('talepStep'+n).style.display = n === talepCurrentStep ? '' : 'none';
+    const ind = document.getElementById('stepInd'+n);
+    ind.classList.remove('active','done');
+    if (n === talepCurrentStep) ind.classList.add('active');
+    else if (n < talepCurrentStep) ind.classList.add('done');
+  });
+  document.querySelectorAll('.step-line').forEach((l,i) => {
+    l.classList.toggle('done', i+1 < talepCurrentStep);
+  });
+  document.getElementById('talepBackBtn').style.display = talepCurrentStep > 1 ? '' : 'none';
+  document.getElementById('talepCancelBtn').style.display = talepCurrentStep === 1 ? '' : 'none';
+  document.getElementById('talepNextBtn').style.display = talepCurrentStep < 3 ? '' : 'none';
+  document.getElementById('talepSubmitBtn').style.display = talepCurrentStep === 3 ? '' : 'none';
+}
+
+function talepStepNext() {
+  if (talepCurrentStep === 1) {
+    const checkin = document.getElementById('talepCheckin').value;
+    const checkout = document.getElementById('talepCheckout').value;
+    if (!checkin || !checkout) { alert('Lütfen giriş ve çıkış tarihlerini seçin.'); return; }
+    if (new Date(checkout) <= new Date(checkin)) { alert('Çıkış tarihi giriş tarihinden sonra olmalıdır.'); return; }
+  }
+  if (talepCurrentStep < 3) { talepCurrentStep++; renderTalepStep(); }
+}
+
+function talepStepBack() {
+  if (talepCurrentStep > 1) { talepCurrentStep--; renderTalepStep(); }
+}
+
+function changeTalepCount(type, delta) {
+  if (type === 'adults') {
+    talepAdultsCount = Math.max(1, Math.min(20, talepAdultsCount + delta));
+    document.getElementById('talepAdultsVal').textContent = talepAdultsCount;
+    document.getElementById('talepAdults').value = talepAdultsCount;
+  } else {
+    talepChildrenCount = Math.max(0, Math.min(10, talepChildrenCount + delta));
+    document.getElementById('talepChildrenVal').textContent = talepChildrenCount;
+    document.getElementById('talepChildren').value = talepChildrenCount;
+  }
+}
+
+function toggleAllPrices() {
+  talepNoBudget = !talepNoBudget;
+  document.getElementById('budgetSection').style.display = talepNoBudget ? 'none' : '';
+  document.getElementById('allPricesBtn').classList.toggle('selected', talepNoBudget);
+  document.getElementById('allPricesBtnIcon').innerHTML = talepNoBudget
+    ? '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" fill="var(--forest)" stroke="var(--forest)" stroke-width="1.8"/><polyline points="5,9 8,12 13,6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>'
+    : '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" stroke="var(--forest)" stroke-width="1.8"/></svg>';
+  document.getElementById('talepNoBudget').value = talepNoBudget ? '1' : '0';
+}
+
 
 function toggleTalepFilter(item) {
   const checkbox = item.querySelector('input');
@@ -6419,6 +6735,17 @@ function getFilterLabel(value) {
 
 </script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"75124c326cb447fe934cde04713ae013","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+<!-- Talep Date Picker Popup -->
+<div id="talepDatePickerPopup" style="display:none;position:fixed;background:var(--white);border-radius:var(--radius-sm);box-shadow:0 12px 50px rgba(0,0,0,0.25);padding:20px;z-index:999999;border:1px solid #e0ddd5;min-width:300px;">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+    <button type="button" onclick="event.stopPropagation();tdpPrev()" class="guest-btn" style="font-size:18px;line-height:1;">‹</button>
+    <span id="tdpMonthLabel" style="font-size:15px;font-weight:700;color:var(--bark);"></span>
+    <button type="button" onclick="event.stopPropagation();tdpNext()" class="guest-btn" style="font-size:18px;line-height:1;">›</button>
+  </div>
+  <div id="tdpGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center;"></div>
+  <button type="button" onclick="event.stopPropagation();closeTalepDatePicker()" class="guest-done-btn" style="margin-top:16px;">Tamam</button>
+</div>
+
 <!-- Type Dropdown -->
 <div id="typeDropdown" style="display:none;position:fixed;background:var(--white);border-radius:var(--radius-sm);box-shadow:0 12px 50px rgba(0,0,0,0.25);padding:12px;z-index:99999;border:1px solid #e0ddd5;min-width:220px;">
 <div id="typeOpt-bungalov" onclick="selectType('bungalov','Bungalov')" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;cursor:pointer;font-size:15px;font-weight:600;color:var(--bark);border-bottom:1px solid var(--sand);transition:background 0.15s;" onmouseover="this.style.background='var(--cream)'" onmouseout="this.style.background=''">
