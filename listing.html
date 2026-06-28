@@ -81,20 +81,201 @@ h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
 /* Hero */
 .detail-hero {
   position: relative;
+  background: var(--cream);
+  padding: 32px 24px;
+}
+.hero-gallery {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.hero-main-image {
+  position: relative;
+  width: 100%;
   height: 520px;
+  border-radius: 16px;
   overflow: hidden;
-  background: var(--bark);
+  background: var(--sand);
+  margin-bottom: 16px;
 }
-.detail-hero img {
-  width: 100%; height: 100%; object-fit: cover;
-  transition: transform 0.6s ease;
+.hero-main-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
 }
-.detail-hero:hover img { transform: scale(1.02); }
-.detail-hero-overlay {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  background: linear-gradient(transparent, rgba(0,0,0,0.75));
-  padding: 60px 32px 32px;
+.hero-zoom-btn {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.95);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 10;
+}
+.hero-zoom-btn:hover {
+  background: white;
+  transform: scale(1.1);
+}
+.hero-zoom-btn svg {
+  width: 24px;
+  height: 24px;
+  stroke: var(--bark);
+}
+.hero-thumbnails {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: thin;
+}
+.hero-thumbnails::-webkit-scrollbar {
+  height: 6px;
+}
+.hero-thumbnails::-webkit-scrollbar-track {
+  background: var(--sand);
+  border-radius: 3px;
+}
+.hero-thumbnails::-webkit-scrollbar-thumb {
+  background: var(--stone);
+  border-radius: 3px;
+}
+.hero-thumb {
+  width: 120px;
+  height: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+.hero-thumb:hover {
+  opacity: 0.8;
+  border-color: var(--sage);
+}
+.hero-thumb.active {
+  opacity: 1;
+  border-color: var(--forest);
+}
+.hero-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Lightbox */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.95);
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+.lightbox-overlay.open {
+  display: flex;
+}
+.lightbox-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lightbox-content img {
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 8px;
+}
+.lightbox-close {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  border: none;
+  cursor: pointer;
   color: white;
+  font-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  z-index: 10001;
+}
+.lightbox-close:hover {
+  background: rgba(255,255,255,0.3);
+}
+.lightbox-nav {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-size: 36px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  z-index: 10001;
+}
+.lightbox-nav:hover {
+  background: rgba(255,255,255,0.35);
+}
+.lightbox-prev {
+  left: 24px;
+}
+.lightbox-next {
+  right: 24px;
+}
+.lightbox-counter {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  background: rgba(0,0,0,0.5);
+  padding: 8px 20px;
+  border-radius: 50px;
+  z-index: 10001;
+}
+
+@media (max-width: 768px) {
+  .detail-hero { padding: 16px; }
+  .hero-main-image { height: 320px; }
+  .hero-thumb { width: 80px; height: 60px; }
+  .lightbox-prev { left: 12px; width: 44px; height: 44px; font-size: 28px; }
+  .lightbox-next { right: 12px; width: 44px; height: 44px; font-size: 28px; }
+}
+.detail-hero-overlay {
+  position: static;
+  background: none;
+  padding: 0;
+  margin-top: 16px;
+  color: var(--bark);
 }
 .detail-hero-inner {
   max-width: 1200px; margin: 0 auto;
@@ -115,11 +296,12 @@ h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
   font-weight: 800;
   margin-bottom: 8px;
   line-height: 1.15;
+  color: var(--forest);
 }
 .detail-meta {
   display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
   font-size: 16px;
-  opacity: 0.9;
+  color: var(--stone);
 }
 
 /* Container */
@@ -310,6 +492,73 @@ h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
   background: #0d1f15; color: rgba(255,255,255,0.7); padding: 40px 24px;
   text-align: center; font-size: 14px;
 }
+
+/* Host Section */
+.host-section {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.host-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--forest);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.host-info {
+  flex: 1;
+}
+.host-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--forest);
+  margin-bottom: 4px;
+  font-family: 'Playfair Display', serif;
+}
+.host-stats {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+}
+.host-stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--bark);
+}
+.host-stat-icon {
+  font-size: 16px;
+}
+.host-stat-value {
+  font-weight: 600;
+}
+.host-rating-stars {
+  color: var(--amber);
+  font-size: 14px;
+}
+@media (max-width: 768px) {
+  .host-section {
+    flex-direction: column;
+    text-align: center;
+  }
+  .host-stats {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
 </style>
 </head>
 <body>
@@ -328,12 +577,25 @@ h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
 
 <!-- HERO -->
 <section class="detail-hero" id="detailHero">
-  <img id="heroImg" src="" alt="">
-  <div class="detail-hero-overlay">
-    <div class="detail-hero-inner">
+  <div class="hero-gallery">
+    <div class="hero-main-image">
+      <img id="heroMainImg" src="" alt="">
+      <button class="hero-zoom-btn" onclick="openLightbox()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          <line x1="11" y1="8" x2="11" y2="14"></line>
+          <line x1="8" y1="11" x2="14" y2="11"></line>
+        </svg>
+      </button>
+    </div>
+    <div class="hero-thumbnails" id="heroThumbnails"></div>
+  </div>
+  <div class="detail-hero-overlay" style="position: static; background: none; padding: 0; margin-top: 16px; color: var(--bark);">
+    <div class="detail-hero-inner" style="max-width: 1200px; margin: 0 auto;">
       <div class="detail-badge" id="heroBadge" style="display:none;"></div>
-      <h1 class="detail-title" id="heroTitle"></h1>
-      <div class="detail-meta">
+      <h1 class="detail-title" id="heroTitle" style="color: var(--forest);"></h1>
+      <div class="detail-meta" style="color: var(--stone);">
         <span id="heroLoc"></span>
         <span>•</span>
         <span>★ <span id="heroRating"></span> (<span id="heroReviews"></span> değerlendirme)</span>
@@ -342,9 +604,23 @@ h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
   </div>
 </section>
 
+<!-- LIGHTBOX -->
+<div class="lightbox-overlay" id="lightboxOverlay" onclick="closeLightbox(event)">
+  <div class="lightbox-content">
+    <img id="lightboxImg" src="" alt="">
+  </div>
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <button class="lightbox-nav lightbox-prev" onclick="event.stopPropagation(); navigateLightbox(-1)">‹</button>
+  <button class="lightbox-nav lightbox-next" onclick="event.stopPropagation(); navigateLightbox(1)">›</button>
+  <div class="lightbox-counter" id="lightboxCounter"></div>
+</div>
+
 <!-- CONTENT -->
 <div class="detail-container">
   <div class="detail-content">
+    <!-- EV SAHİBİ BÖLÜMÜ -->
+    <div class="host-section" id="hostSection"></div>
+
     <div class="quick-stats" id="quickStats"></div>
 
     <div class="desc-section">
@@ -372,9 +648,8 @@ h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
       </div>
       <div class="price-rating" id="sideRating"></div>
       <div class="price-actions">
-        <button class="btn btn-amber" onclick="alert('Rezervasyon sistemi yakında!')">Rezervasyon Yap</button>
-        <button class="btn btn-outline" onclick="window.open('https://wa.me/?text=' + encodeURIComponent('Merhaba, ' + (currentListing ? currentListing.title : '') + ' ilanı hakkında bilgi almak istiyorum.'), '_blank')">WhatsApp ile İletişime Geç</button>
-        <button class="btn btn-primary" onclick="window.location.href='index.html#listings'">Diğer İlanları Gör</button>
+        <button class="btn btn-amber" onclick="openMessageModal()">💬 Mesaj At</button>
+        <button class="btn btn-outline" onclick="openInfoModal()">ℹ️ Bilgi Talep Et</button>
       </div>
     </div>
 
@@ -398,10 +673,357 @@ h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
   </div>
 </section>
 
+<!-- BİLGİ TALEP ET MODAL -->
+<div class="contact-modal-overlay" id="infoModalOverlay" onclick="if(event.target===this)closeInfoModal()">
+  <div class="contact-modal">
+    <div class="contact-modal-header">
+      <h2>Bilgi Talep Et</h2>
+      <p>Bu bungalov hakkında merak ettiklerinizi sorun</p>
+      <button class="contact-modal-close" onclick="closeInfoModal()">✕</button>
+    </div>
+    <div class="contact-modal-body">
+      <form id="infoForm" onsubmit="submitInfoForm(event)">
+        <div class="form-group">
+          <label>Ad Soyad <span class="required">*</span></label>
+          <input type="text" name="info-name" placeholder="Adınız Soyadınız" required>
+        </div>
+        <div class="form-group">
+          <label>E-posta <span class="required">*</span></label>
+          <input type="email" name="info-email" placeholder="ornek@email.com" required>
+        </div>
+        <div class="form-group">
+          <label>Telefon</label>
+          <input type="tel" name="info-phone" placeholder="0532 123 45 67">
+        </div>
+        <div class="form-group">
+          <label>Mesajınız <span class="required">*</span></label>
+          <textarea name="info-message" placeholder="Bungalov hakkında sormak istediğiniz soruları yazın..." required></textarea>
+        </div>
+        <button type="submit" class="contact-submit-btn info-btn">Bilgi Talebini Gönder</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MESAJ AT MODAL -->
+<div class="contact-modal-overlay" id="messageModalOverlay" onclick="if(event.target===this)closeMessageModal()">
+  <div class="chat-modal">
+    <div class="chat-header">
+      <div class="chat-header-info">
+        <div class="chat-host-info">
+          <h3 id="chatListingTitle">İlan Başlığı</h3>
+          <span class="chat-status">● Çevrimiçi</span>
+        </div>
+      </div>
+      <button class="contact-modal-close" onclick="closeMessageModal()">✕</button>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-welcome">
+        <div class="chat-welcome-icon">💬</div>
+        <p>Ev sahibine mesaj gönderin. Sorularınızı yanıtlayacaktır.</p>
+      </div>
+    </div>
+    <div class="chat-input-area">
+      <div class="chat-input-wrapper">
+        <input type="text" id="chatInput" placeholder="Mesajınızı yazın..." onkeypress="handleChatKeypress(event)">
+        <button class="chat-send-btn" onclick="sendMessage()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- FOOTER -->
 <footer class="footer">
   <p>© 2025 BungaLive. Tüm hakları saklıdır. | bungalive.com</p>
 </footer>
+
+<style>
+/* Chat Modal Styles */
+.chat-modal {
+  background: var(--white);
+  border-radius: 20px;
+  width: 90%;
+  max-width: 500px;
+  height: 80vh;
+  max-height: 700px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  animation: modalIn 0.3s ease;
+}
+.chat-header {
+  padding: 20px;
+  border-bottom: 1px solid var(--sand);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--forest);
+  color: white;
+  border-radius: 20px 20px 0 0;
+}
+.chat-header-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.chat-host-info h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+}
+.chat-status {
+  font-size: 12px;
+  color: #4ade80;
+}
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #f8f9fa;
+}
+.chat-welcome {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--stone);
+}
+.chat-welcome-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+.chat-welcome p {
+  font-size: 14px;
+  line-height: 1.6;
+}
+.chat-input-area {
+  padding: 16px 20px;
+  border-top: 1px solid var(--sand);
+  background: white;
+  border-radius: 0 0 20px 20px;
+}
+.chat-input-wrapper {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.chat-input-wrapper input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 24px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  font-family: 'DM Sans', sans-serif;
+}
+.chat-input-wrapper input:focus {
+  border-color: var(--forest);
+}
+.chat-send-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--forest);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.chat-send-btn:hover {
+  background: var(--moss);
+  transform: scale(1.05);
+}
+.contact-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+}
+.contact-modal-overlay.open {
+  display: flex;
+}
+.contact-modal {
+  background: var(--white);
+  border-radius: 24px;
+  max-width: 560px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: modalIn 0.35s ease;
+}
+.contact-modal-header {
+  padding: 32px 32px 0;
+  position: relative;
+}
+.contact-modal-header h2 {
+  font-size: 26px;
+  color: var(--forest);
+  margin-bottom: 6px;
+}
+.contact-modal-header p {
+  color: var(--stone);
+  font-size: 15px;
+}
+.contact-modal-close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--sand);
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.contact-modal-close:hover {
+  background: #e0ddd5;
+  transform: scale(1.1);
+}
+.contact-modal-body {
+  padding: 28px 32px 32px;
+}
+.contact-modal-body .form-group {
+  margin-bottom: 16px;
+}
+.contact-modal-body .form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--bark);
+  margin-bottom: 6px;
+  display: block;
+}
+.contact-modal-body .form-group input,
+.contact-modal-body .form-group textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid #e0ddd5;
+  border-radius: 10px;
+  font-size: 15px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--bark);
+  transition: all 0.2s;
+  background: var(--white);
+}
+.contact-modal-body .form-group input:focus,
+.contact-modal-body .form-group textarea:focus {
+  outline: none;
+  border-color: var(--forest);
+  box-shadow: 0 0 0 3px rgba(26,60,42,0.1);
+}
+.contact-modal-body .form-group textarea {
+  resize: vertical;
+  min-height: 110px;
+}
+.contact-submit-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.25s;
+  font-family: 'DM Sans', sans-serif;
+  margin-top: 8px;
+}
+.contact-submit-btn.info-btn {
+  background: var(--forest);
+  color: var(--white);
+}
+.contact-submit-btn.info-btn:hover {
+  background: var(--moss);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.92) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+</style>
+
+<script>
+// Modal fonksiyonları
+function openInfoModal() {
+  document.getElementById('infoModalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeInfoModal() {
+  document.getElementById('infoModalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function openMessageModal() {
+  const title = currentListing ? currentListing.title : '';
+  document.getElementById('chatListingTitle').textContent = title;
+  document.getElementById('messageModalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMessageModal() {
+  document.getElementById('messageModalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function submitInfoForm(event) {
+  event.preventDefault();
+  alert('Bilgi talebiniz gönderildi! En kısa sürede size dönüş yapılacaktır.');
+  closeInfoModal();
+}
+
+function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const message = input.value.trim();
+  if (!message) return;
+  
+  const messages = document.getElementById('chatMessages');
+  const welcome = messages.querySelector('.chat-welcome');
+  if (welcome) welcome.remove();
+  
+  const msgDiv = document.createElement('div');
+  msgDiv.className = 'chat-message sent';
+  msgDiv.innerHTML = `<div class="chat-message-bubble">${message}</div>`;
+  messages.appendChild(msgDiv);
+  
+  input.value = '';
+  messages.scrollTop = messages.scrollHeight;
+  
+  // Otomatik yanıt
+  setTimeout(() => {
+    const replyDiv = document.createElement('div');
+    replyDiv.className = 'chat-message received';
+    replyDiv.innerHTML = `<div class="chat-message-bubble">Mesajınız için teşekkürler. En kısa sürede size dönüş yapacağım.</div>`;
+    messages.appendChild(replyDiv);
+    messages.scrollTop = messages.scrollHeight;
+  }, 1000);
+}
+
+function handleChatKeypress(event) {
+  if (event.key === 'Enter') {
+    sendMessage();
+  }
+}
+</script>
 <script>
 // İlan verileri
 const listings = [
@@ -409,73 +1031,145 @@ const listings = [
     id:1, title:"Sapanca Göl Bungalov", city:"sapanca", tags:["gol","cift","jakuzi"], loc:"Sapanca, Sakarya",
     price:3200, rating:4.9, reviews:128, beds:2, guests:4, baths:1, sqm:65,
     badge:"premium", badgeText:"Premium",
-    img:"https://www.bizevdeyokuz.com/wp-content/uploads/sapanca-goldibikucuk-ev.jpg",
+    img:"https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=800",
+    images:[
+      "https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=800"
+    ],
     desc:"Sapanca Gölü kıyısında, doğayla iç içe şık bir bungalov. Özel teras, şömine ve jakuzi ile konforlu bir tatil deneyimi. Göl manzarası ve orman yürüyüş parkurlarına yakın.",
-    centerDistance:"2.5 km", marketDistance:"500 m", breakfast:true, payment:"card"
+    centerDistance:"2.5 km", marketDistance:"500 m", breakfast:true, payment:"card",
+    host:{name:"Ahmet Yılmaz",avatar:"AY",rating:4.8,years:3,listings:5}
   },
   {
     id:2, title:"Sapanca Üçgen Bungalov", city:"sapanca", tags:["aile","havuzlu"], loc:"Sapanca, Sakarya",
     price:4500, rating:4.8, reviews:96, beds:3, guests:6, baths:2, sqm:95,
     badge:"premium", badgeText:"En Çok Tercih Edilen",
-    img:"https://www.bizevdeyokuz.com/wp-content/uploads/sapanca-ucgen-ev-2.jpg",
+    img:"https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=800",
+    images:[
+      "https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=800"
+    ],
     desc:"Modern mimarisiyle dikkat çeken üçgen bungalov. 3 yatak odası, tam donanımlı mutfak, özel havuz ve geniş bahçe. Aileler ve arkadaş grupları için ideal.",
-    centerDistance:"3.2 km", marketDistance:"800 m", breakfast:false, payment:"both"
+    centerDistance:"3.2 km", marketDistance:"800 m", breakfast:false, payment:"both",
+    host:{name:"Mehmet Kaya",avatar:"MK",rating:4.9,years:5,listings:3}
   },
   {
     id:3, title:"Sapanca Orman Bungalov", city:"sapanca", tags:["orman","aile","kahvalti"], loc:"Sapanca, Sakarya",
     price:2100, rating:4.9, reviews:203, beds:2, guests:4, baths:1, sqm:55,
     badge:"premium", badgeText:"Doğa İçinde",
-    img:"https://www.bizevdeyokuz.com/wp-content/uploads/istanbuldere-ahsap-ev-sapanca.jpg",
+    img:"https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=800",
+    images:[
+      "https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=800"
+    ],
     desc:"Ormanın kalbinde, ahşap dokusuyla sıcak bir atmosfer sunan bungalov. Kuş sesleriyle uyanın, doğa yürüyüşlerine çıkın. Organik kahvaltı dahil.",
-    centerDistance:"5.1 km", marketDistance:"1.2 km", breakfast:true, payment:"cash"
+    centerDistance:"5.1 km", marketDistance:"1.2 km", breakfast:true, payment:"cash",
+    host:{name:"Zeynep Demir",avatar:"ZD",rating:4.7,years:2,listings:2}
   },
   {
     id:4, title:"Havuzlu Lüks Bungalov", city:"sapanca", tags:["luks","havuzlu","cift","jakuzi"], loc:"Sapanca, Sakarya",
     price:5800, rating:5.0, reviews:87, beds:3, guests:6, baths:2, sqm:120,
     badge:"premium", badgeText:"Lüks",
-    img:"https://www.bungalovyolu.com/uploads/WhatsApp-image-2024-05-05-at-15-26-07_402.jpeg",
+    img:"https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=800",
+    images:[
+      "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1396132/pexels-photo-1396132.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=800"
+    ],
     desc:"Özel ısıtmalı havuzu, jakuzisi ve şöminesiyle lüks bir kaçamak. Modern iç tasarımı, geniş yaşam alanı ve muhteşem doğa manzarası. Balayı çiftleri için ideal.",
-    centerDistance:"1.8 km", marketDistance:"300 m", breakfast:true, payment:"card"
+    centerDistance:"1.8 km", marketDistance:"300 m", breakfast:true, payment:"card",
+    host:{name:"Ali Öztürk",avatar:"AÖ",rating:5.0,years:4,listings:1}
   },
   {
     id:5, title:"Sapanca Teras Bungalov", city:"sapanca", tags:["gol","aile"], loc:"Sapanca, Sakarya",
     price:3750, rating:4.7, reviews:154, beds:2, guests:4, baths:1, sqm:70,
     badge:"", badgeText:"",
-    img:"https://www.bungalovilla.com/upload/catalog/186/1200/sapanca-teras-bungalov-84.jpg?22",
+    img:"https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=800",
+    images:[
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=800"
+    ],
     desc:"Geniş terasıyla Sapanca'nın eşsiz manzarasını seyredin. Ahşap dekorasyon, şömine ve tam donanımlı mutfak. Doğa yürüyüşü ve göl turu imkanı.",
-    centerDistance:"2.0 km", marketDistance:"600 m", breakfast:false, payment:"both"
+    centerDistance:"2.0 km", marketDistance:"600 m", breakfast:false, payment:"both",
+    host:{name:"Fatma Şahin",avatar:"FŞ",rating:4.6,years:1,listings:4}
   },
   {
     id:6, title:"Sapanca Doğa Bungalov", city:"sapanca", tags:["orman","aile","evcil"], loc:"Sapanca, Sakarya",
     price:2400, rating:4.8, reviews:176, beds:2, guests:5, baths:1, sqm:60,
     badge:"", badgeText:"",
-    img:"https://cdn.trav3l.net/sapancakonaklamarehberi.com/uploads/sapanca-bungalov-evleri-fiyatlari.jpeg",
+    img:"https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=800",
+    images:[
+      "https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=800"
+    ],
     desc:"Yemyeşil orman içinde, huzurlu bir konaklama. Aileler için geniş yaşam alanı, mangal alanı ve çocuk oyun parkı. Evcil hayvan dostu.",
-    centerDistance:"4.5 km", marketDistance:"1.5 km", breakfast:false, payment:"cash"
+    centerDistance:"4.5 km", marketDistance:"1.5 km", breakfast:false, payment:"cash",
+    host:{name:"Can Arslan",avatar:"CA",rating:4.8,years:3,listings:2}
   },
   {
     id:7, title:"Sapanca Göl Manzaralı Bungalov", city:"sapanca", tags:["gol","cift"], loc:"Sapanca, Sakarya",
     price:2800, rating:4.6, reviews:211, beds:1, guests:2, baths:1, sqm:40,
     badge:"", badgeText:"",
-    img:"https://www.seninvillan.com.tr/assets/images/blog/big/sapanca-bungalov-ev_1.jpg",
+    img:"https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=800",
+    images:[
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1396132/pexels-photo-1396132.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=800"
+    ],
     desc:"Sapanca Gölü manzarasına bakan romantik bungalov. Özel balkon, kayık imkanı ve muhteşem gün batımı. Çiftler için huzurlu bir kaçış noktası.",
-    centerDistance:"2.8 km", marketDistance:"700 m", breakfast:true, payment:"card"
+    centerDistance:"2.8 km", marketDistance:"700 m", breakfast:true, payment:"card",
+    host:{name:"Elif Yıldız",avatar:"EY",rating:4.5,years:2,listings:3}
   },
   {
     id:8, title:"Sapanca Villa Bungalov", city:"sapanca", tags:["luks","havuzlu","aile","merkezi"], loc:"Sapanca, Sakarya",
     price:4100, rating:4.9, reviews:143, beds:3, guests:6, baths:2, sqm:85,
     badge:"premium", badgeText:"Yeni",
-    img:"https://cdn.hellovillam.com/HelloVillam/images/w600/bungalov-mezit-2-1-oda-4-kisi-175221.jpg",
+    img:"https://images.pexels.com/photos/1396132/pexels-photo-1396132.jpeg?auto=compress&cs=tinysrgb&w=800",
+    images:[
+      "https://images.pexels.com/photos/1396132/pexels-photo-1396132.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=800"
+    ],
     desc:"Villa konforunda bungalov deneyimi. Özel havuz, BBQ alanı, geniş bahçe ve panoramik dağ manzarası. Kalabalık gruplar için ideal.",
-    centerDistance:"1.2 km", marketDistance:"200 m", breakfast:true, payment:"card"
+    centerDistance:"1.2 km", marketDistance:"200 m", breakfast:true, payment:"card",
+    host:{name:"Burak Korkmaz",avatar:"BK",rating:4.9,years:6,listings:2}
   },
   {
     id:9, title:"Sapanca Dere Kenarı Bungalov", city:"sapanca", tags:["orman","aile"], loc:"Sapanca, Sakarya",
     price:1950, rating:4.7, reviews:89, beds:2, guests:4, baths:1, sqm:50,
     badge:"", badgeText:"",
-    img:"https://www.bungalovilla.com/upload/catalog/293/610/400/sapanca-terra-bungalov-780.jpg?22",
+    img:"https://images.pexels.com/photos/259580/pexels-photo-259580.jpeg?auto=compress&cs=tinysrgb&w=800",
+    images:[
+      "https://images.pexels.com/photos/259580/pexels-photo-259580.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=800"
+    ],
     desc:"Dere kenarında, doğanın sesleriyle çevrili huzurlu bungalov. Balık tutma imkanı, mangal alanı ve çocuklar için güvenli oyun alanı. Fiyat-performans odaklı.",
-    centerDistance:"6.0 km", marketDistance:"2.0 km", breakfast:false, payment:"cash"
+    centerDistance:"6.0 km", marketDistance:"2.0 km", breakfast:false, payment:"cash",
+    host:{name:"Selin Aydın",avatar:"SA",rating:4.7,years:2,listings:1}
   }
 ];
 
@@ -515,9 +1209,53 @@ function renderListing() {
   // Title
   document.title = l.title + ' - BungaLive';
 
-  // Hero
-  document.getElementById('heroImg').src = l.img;
-  document.getElementById('heroImg').alt = l.title;
+  // Host Section
+  if (l.host) {
+    document.getElementById('hostSection').innerHTML = `
+      <div class="host-avatar">${l.host.avatar}</div>
+      <div class="host-info">
+        <div class="host-name">${l.host.name}</div>
+        <div class="host-stats">
+          <div class="host-stat">
+            <span class="host-stat-icon">⭐</span>
+            <span class="host-stat-value">${l.host.rating}</span>
+            <span>Evl sahibi puanı</span>
+          </div>
+          <div class="host-stat">
+            <span class="host-stat-icon">📅</span>
+            <span class="host-stat-value">${l.host.years} yıl</span>
+            <span>deneyim</span>
+          </div>
+          <div class="host-stat">
+            <span class="host-stat-icon">🏠</span>
+            <span class="host-stat-value">${l.host.listings}</span>
+            <span>ilan</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Hero Gallery
+  const images = l.images && l.images.length > 0 ? l.images : [l.img];
+  
+  // Ana fotoğraf
+  document.getElementById('heroMainImg').src = images[0];
+  document.getElementById('heroMainImg').alt = l.title;
+  
+  // Thumbnail'ler
+  const thumbnailsContainer = document.getElementById('heroThumbnails');
+  thumbnailsContainer.innerHTML = images.map((img, idx) => 
+    `<div class="hero-thumb ${idx === 0 ? 'active' : ''}" onclick="selectHeroImage(${idx})">
+      <img src="${img}" alt="${l.title} ${idx + 1}">
+    </div>`
+  ).join('');
+  
+  // Global değişkenler
+  window.heroImages = images;
+  window.currentHeroIndex = 0;
+  window.lightboxIndex = 0;
+  
   document.getElementById('heroTitle').textContent = l.title;
   document.getElementById('heroLoc').textContent = '📍 ' + l.loc;
   document.getElementById('heroRating').textContent = l.rating;
@@ -624,8 +1362,57 @@ function renderListing() {
   `).join('');
 }
 
+// Hero Gallery Functions
+function selectHeroImage(index) {
+  window.currentHeroIndex = index;
+  document.getElementById('heroMainImg').src = window.heroImages[index];
+  
+  // Thumbnail aktif durumunu güncelle
+  document.querySelectorAll('.hero-thumb').forEach((thumb, idx) => {
+    thumb.classList.toggle('active', idx === index);
+  });
+}
+
+// Lightbox Functions
+function openLightbox() {
+  window.lightboxIndex = window.currentHeroIndex;
+  document.getElementById('lightboxImg').src = window.heroImages[window.lightboxIndex];
+  document.getElementById('lightboxCounter').textContent = `${window.lightboxIndex + 1} / ${window.heroImages.length}`;
+  document.getElementById('lightboxOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox(event) {
+  if (event && event.target !== document.getElementById('lightboxOverlay')) return;
+  document.getElementById('lightboxOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function navigateLightbox(direction) {
+  window.lightboxIndex += direction;
+  if (window.lightboxIndex < 0) window.lightboxIndex = window.heroImages.length - 1;
+  if (window.lightboxIndex >= window.heroImages.length) window.lightboxIndex = 0;
+  
+  document.getElementById('lightboxImg').src = window.heroImages[window.lightboxIndex];
+  document.getElementById('lightboxCounter').textContent = `${window.lightboxIndex + 1} / ${window.heroImages.length}`;
+  
+  // Ana galeriyi de güncelle
+  selectHeroImage(window.lightboxIndex);
+}
+
+// Klavye navigasyonu
+document.addEventListener('keydown', function(e) {
+  const lightbox = document.getElementById('lightboxOverlay');
+  if (!lightbox.classList.contains('open')) return;
+  
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowLeft') navigateLightbox(-1);
+  if (e.key === 'ArrowRight') navigateLightbox(1);
+});
+
 renderListing();
 </script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"75124c326cb447fe934cde04713ae013","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"75124c326cb447fe934cde04713ae013","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
