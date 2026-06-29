@@ -1435,7 +1435,7 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
 }
 .footer-inner {
   max-width: 1340px; margin: 0 auto;
-  display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 48px;
+    display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 48px;
 }
 .footer-brand p { font-size: 14px; line-height: 1.7; margin-top: 16px; max-width: 300px; }
 .footer h4 { color: var(--white); font-size: 16px; margin-bottom: 20px; }
@@ -3386,16 +3386,6 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
       <p>Sapanca'nın en büyük bungalov kiralama platformu. Göl kenarında, orman içinde unutulmaz tatiller için BungaLive.</p>
     </div>
     <div>
-      <h4>Keşfet</h4>
-      <ul>
-        <li><a href="#">Tüm İlanlar</a></li>
-        <li><a href="#">Göl Kenarı Bungalovlar</a></li>
-        <li><a href="#">Orman İçi Bungalovlar</a></li>
-        <li><a href="#">Havuzlu Bungalovlar</a></li>
-        <li><a href="#">Lüks Bungalovlar</a></li>
-      </ul>
-    </div>
-    <div>
       <h4>Şirket</h4>
       <ul>
         <li><a href="#">Hakkımızda</a></li>
@@ -3521,6 +3511,16 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
             <div class="g-recaptcha" data-sitekey="6Ld8zDgtAAAAABVbFC4uUvhastwezp6H5by65tzr" data-callback="onRecaptchaSuccess" data-expired-callback="onRecaptchaExpired"></div>
           </div>
           <div id="registerError" style="color:#c4613a;font-size:13px;text-align:center;margin-bottom:8px;display:none;"></div>
+          <div class="legal-agreement-container" style="margin-bottom: 20px; text-align: left;">
+            <label style="display: flex; align-items: flex-start; gap: 10px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--bark); cursor: pointer; line-height: 1.4;">
+              <input type="checkbox" id="kvkkCheck" required style="accent-color: var(--moss); margin-top: 3px; width: 16px; height: 16px; cursor: pointer;">
+              <span>
+                <a href="#" onclick="openLegalModal('kullanici-sozlesmesi'); return false;" style="color: var(--amber); font-weight: 600; text-decoration: underline;">Kullanıcı Sözleşmesi</a>'ni, 
+                <a href="#" onclick="openLegalModal('gizlilik-politikasi'); return false;" style="color: var(--amber); font-weight: 600; text-decoration: underline;">Gizlilik Politikası</a>'nı ve 
+                <a href="#" onclick="openLegalModal('kvkk-aydinlatma'); return false;" style="color: var(--amber); font-weight: 600; text-decoration: underline;">KVKK Aydınlatma Metni</a>'ni okudum, kabul ediyorum.
+              </span>
+            </label>
+          </div>
           <button type="submit" class="contact-submit-btn info-btn" id="registerSubmitBtn" disabled>Kayıt Ol</button>
         </form>
         <div style="display:flex;align-items:center;gap:12px;margin:16px 0;">
@@ -7318,6 +7318,70 @@ function closeUserPanel() {
   document.body.style.overflow = '';
 }
 
+</script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"75124c326cb447fe934cde04713ae013","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+
+<!-- LEGAL MODAL -->
+<div id="legalModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 99999; justify-content: center; align-items: center; padding: 20px;">
+  <div style="background: var(--cream); max-width: 600px; width: 100%; max-height: 80vh; border-radius: 16px; display: flex; flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.2); animation: modalFadeIn 0.3s ease-in-out;">
+    <div style="padding: 20px; border-bottom: 1px solid var(--sand); display: flex; justify-content: space-between; align-items: center;">
+      <h3 id="legalModalTitle" style="font-family: 'Playfair Display', serif; color: var(--forest); margin: 0; font-size: 20px;">Yasal Metin</h3>
+      <button onclick="closeLegalModal()" style="background: none; border: none; font-size: 24px; color: var(--stone); cursor: pointer; line-height: 1;">&times;</button>
+    </div>
+    <div id="legalModalBody" style="padding: 20px; overflow-y: auto; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--bark); line-height: 1.6; text-align: left;">
+    </div>
+    <div style="padding: 15px 20px; border-top: 1px solid var(--sand); text-align: right;">
+      <button onclick="closeLegalModal()" style="background: var(--moss); color: white; border: none; padding: 8px 20px; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; transition: background 0.2s;">Kapat</button>
+    </div>
+  </div>
+</div>
+
+<style>
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
+
+<script>
+const legalTexts = {
+  'kullanici-sozlesmesi': {
+    title: 'Kullanıcı ve Üyelik Sözleşmesi',
+    body: '<strong>1. Taraflar ve Amaç:</strong> Bu sözleşme, BungaLive platformu üzerinden talep oluşturan kullanıcılar ile sistemin yasal sınırlarını belirler. BungaLive, sadece bungalov işletmeleri ile müşterileri bir araya getiren tersine bir pazar yeri (aracı hizmet sağlayıcı) konumundadır.<br><br><strong>2. Sorumluluk Sınırları:</strong> BungaLive, platformda listelenen tesislerin fiziki durumundan, fiyat doğruluğundan veya konaklama esnasında doğabilecek rezervasyon uyuşmazlıklarından hukuki olarak sorumlu tutulamaz. Kullanıcı, rezervasyon ve ödeme aşamalarında doğrudan ilgili bungalov işletmesiyle muhatap olduğunu kabul eder.'
+  },
+  'gizlilik-politikasi': {
+    title: 'Gizlilik ve Çerez Politikası',
+    body: 'BungaLive olarak, platformumuzu kullanan misafirlerimizin gizliliğine önem veriyoruz. Sitemizde oturum yönetimi, güvenli giriş (Firebase Authentication) ve kullanıcı deneyimini artırmak amacıyla zorunlu çerezler (cookies) kullanılmaktadır. Kişisel verileriniz ve mesajlaşma geçmişiniz, şifrelenmiş güvenli veritabanlarında (Firebase Firestore) tutulmakta olup, üçüncü taraflarla reklam amacıyla kesinlikle paylaşılmamaktadır.'
+  },
+  'kvkk-aydinlatma': {
+    title: 'KVKK Aydınlatma Metni',
+    body: '6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) uyarınca, BungaLive platformuna kayıt olurken paylaştığınız ad, soyad, e-posta adresi ve talep detaylarınız; sizlere daha iyi bir tersine pazar yeri hizmeti sunabilmek, bungalov işletmelerinden teklif alabilmenizi sağlamak ve platform içi güvenli iletişimi yürütmek amacıyla işlenmektedir. İstediğiniz zaman verilerinizin silinmesini veya düzeltilmesini talep etme hakkınız saklıdır.'
+  }
+};
+
+function openLegalModal(type) {
+  const modal = document.getElementById('legalModal');
+  const title = document.getElementById('legalModalTitle');
+  const body = document.getElementById('legalModalBody');
+  if (legalTexts[type]) {
+    title.innerHTML = legalTexts[type].title;
+    body.innerHTML = legalTexts[type].body;
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeLegalModal() {
+  document.getElementById('legalModal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+window.onclick = function(event) {
+  const modal = document.getElementById('legalModal');
+  if (event.target == modal) {
+    closeLegalModal();
+  }
+}
 </script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"75124c326cb447fe934cde04713ae013","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
